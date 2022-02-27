@@ -32,7 +32,7 @@ class QuestionBoard extends React.Component {
 
 	render() {
 		let questionCards = [];
-		const questions = getQuestions();
+		const questions = fetchFromQuestionBank();
 		for (let q in questions) {
 			console.log();
 			questionCards.push(<span key={q}>{this.renderQuestionCard(questions[q][0].function_name)}</span>);
@@ -68,7 +68,7 @@ class AddQuestion extends React.Component {
 
 	handleSubmit(event) {
 		event.preventDefault();
-		console.log(this.state);
+		postToQuestionBank(this.state);
 	}
 	
 	handleChange(event) {
@@ -202,7 +202,11 @@ ReactDOM.render(
 	document.getElementById('add-question')
 );
 
-function getQuestions() {
+function postToQuestionBank(data) {
+	console.log(data);
+}
+
+function fetchFromQuestionBank() {
 	const questions = {
 		'q1': [
 			{ 'function_name': 'twoSum' },
