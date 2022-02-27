@@ -1,0 +1,15 @@
+.question-card {
+    display: flex;
+    flex-direction: row;
+}
+
+.question-card > div {
+    margin: 1em;
+}
+
+.outline {
+    border: 3px solid black;
+    width: 50vw;
+    margin: 1em;
+    padding: 1em
+}
