@@ -1,0 +1,1 @@
+{"id":"5166e257-7ae2-45ed-a89d-b9654be853e2","space":18897,"runtime":"python3.9","name":"cs490Backend","path":"w81a61","project":"b0nj0mz1","account":"144798365827","region":"us-east-1","deps":["flask","deta","flask_cors"],"envs":null,"public":true,"log_level":"debug","cron":""}
