@@ -1,66 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useContext, createContext } from "react";
+import UserContext from "../../Context/user/userContext";
+import { Navigate } from "react-router-dom";
 
-const Login = () => {
-  const [errorMessages, setErrorMessages] = useState({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
+const Login = ({ history }) => {
+  const { isAuthenticated, getUser, logoutUser, errorMessages, role } =
+    useContext(UserContext);
 
-  // User Login info
-  const database = [
-    {
-      username: "user1",
-      password: "pass1",
-    },
-    {
-      username: "user2",
-      password: "pass2",
-    },
-  ];
+  const [loginForm, setLoginForm] = useState({
+    username: "",
+    password: "",
+  });
 
-  const errors = {
-    uname: "invalid username",
-    pass: "invalid password",
+  const onChange = (e) => {
+    setLoginForm({
+      ...loginForm,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleSubmit = (event) => {
-    //Prevent page reload
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
-    var { uname, pass } = document.forms[0];
-
-    // Find user login info
-    const userData = database.find((user) => user.username === uname.value);
-
-    // Compare user info
-    if (userData) {
-      if (userData.password !== pass.value) {
-        // Invalid password
-        setErrorMessages({ name: "pass", message: errors.pass });
-      } else {
-        setIsSubmitted(true);
-      }
-    } else {
-      // Username not found
-      setErrorMessages({ name: "uname", message: errors.uname });
-    }
+    getUser(loginForm);
   };
 
-  // Generate JSX code for error message
-  const renderErrorMessage = (name) =>
-    name === errorMessages.name && (
-      <div className="error">{errorMessages.message}</div>
-    );
   const renderForm = (
     <div className="form">
       <form onSubmit={handleSubmit}>
         <div className="input-container">
           <label>Username </label>
-          <input type="text" name="uname" required />
-          {renderErrorMessage("uname")}
+          <input onChange={onChange} type="text" name="username" required />
         </div>
         <div className="input-container">
           <label>Password </label>
-          <input type="password" name="pass" required />
-          {renderErrorMessage("pass")}
+          <input onChange={onChange} type="password" name="password" required />
         </div>
         <div className="button-container">
           <input type="submit" />
@@ -68,12 +40,26 @@ const Login = () => {
       </form>
     </div>
   );
-
   return (
     <div className="app">
       <div className="login-form">
         <div className="title">Sign In</div>
-        {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
+        {renderForm}
+        {isAuthenticated ? (
+          role == "teacher" ? (
+            <Navigate to="/question-bank" />
+          ) : (
+            <Navigate to="/welcome" />
+          )
+        ) : (
+          <div>
+            {errorMessages.message ? (
+              <h1>{errorMessages.message}</h1>
+            ) : (
+              <h1></h1>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
