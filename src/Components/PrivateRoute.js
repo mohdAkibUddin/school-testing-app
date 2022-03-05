@@ -14,12 +14,21 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       !username &&
       localStorage.getItem("userData")
     ) {
+      console.log(localStorage.getItem("userData"));
       dispatch(JSON.parse(localStorage.getItem("userData")));
     }
-  }, [dispatch, isAuthenticated, loading, username]);
+  }, [isAuthenticated]);
 
   return (
-    <>{!isAuthenticated && !loading ? <Navigate to="/" /> : <Component />}</>
+    <>
+      {!isAuthenticated &&
+      !loading &&
+      JSON.parse(localStorage.getItem("userData")).dispatch == "LOGOUT" ? (
+        <Navigate to="/" />
+      ) : (
+        <Component />
+      )}
+    </>
   );
 };
 
