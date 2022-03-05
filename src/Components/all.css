@@ -1,0 +1,57 @@
+.question-card {
+    display: flex;
+    flex-direction: row;
+}
+
+.question-card > div {
+    margin: 1em;
+}
+
+.outline {
+    border: 3px solid black;
+    width: 47vw;
+    margin: 1vh;
+    padding: 4vh;
+    height: 88vh;
+}
+
+.horizontal-aligned-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.horizontal-aligned-container > div {
+    margin: 1em;
+}
+
+.scrollable-container {
+    height: 55vh;
+    overflow-y: scroll;
+}
+
+.parent-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.question-compiler-element {
+    margin-top: 2vh;
+    margin-right: 2vw;
+    padding: 1vw;
+    border: solid black;
+    text-align: center;
+}
+
+.line *{
+    display: inline;
+}
+
+.line > input {
+    width: 25%;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 1vh;
+}

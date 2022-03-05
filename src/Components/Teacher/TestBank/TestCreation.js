@@ -1,0 +1,237 @@
+import axios from "axios";
+import QuestionBoard from "../QuestionBank/Question-Board";
+import React from "react";
+import "../../all.css";
+import clone from "just-clone";
+
+class TestCreation extends React.Component {
+   constructor(props) {
+      super(props);
+      this.state = {
+         question_keys: new Set(),
+         questions: [],
+         displayedCategoryBoxes:
+            new Map() /* This is the responsiblity of QuestionBank itself, refactor later*/,
+      };
+      this.initializeData();
+   }
+
+   async initializeData() {
+      await axios.get("https://w81a61.deta.dev/question").then((response) => {
+         const questions = response.data[0];
+
+         let displayedCategories = new Map();
+         questions.forEach((question) => {
+            question.questionData.categories.forEach((category) => {
+               displayedCategories.set(category, false);
+            });
+         });
+
+         this.setState({
+            questions: questions,
+            displayedCategoryBoxes: displayedCategories,
+         });
+      });
+   }
+
+   actionButtonCallback = (key) => {
+      let question_keys = new Set(this.state.question_keys);
+      question_keys.add(key);
+      this.setState({
+         question_keys: question_keys,
+      });
+   };
+
+   render() {
+      let questions = this.state.questions;
+      return (
+         <div className="parent-container">
+            <div>
+               <QuestionCompiler
+                  question_keys={this.state.question_keys}
+                  questions={this.state.questions}
+               />
+            </div>
+
+            <QuestionBoard
+               button_text={"Add"}
+               actionButtonCallback={this.actionButtonCallback}
+               displayedCategoryBoxes={this.state.displayedCategoryBoxes}
+               questions={questions}
+            />
+         </div>
+      );
+   }
+}
+
+class QuestionCompiler extends React.Component {
+   constructor(props) {
+      super(props);
+      this.state = {
+         questions: new Map(),
+         question_keys: props.question_keys,
+         submission_warning: false,
+      };
+   }
+
+   async postData(data) {
+      await axios.post("https://w81a61.deta.dev/test", data, {
+         headers: {
+            "content-type": "application/json"
+         }
+      }).then(response => {
+         console.log("we gucci, test saved :)");
+         window.location.reload(false);
+      });
+   }
+
+   handleSubmit = () => {
+      let submission_warning = false;
+      for (let question of this.props.question_keys) {
+         console.log(question);
+         if (!this.state.questions.has(question)) {
+            submission_warning = true;
+            this.setState({
+               submission_warning: submission_warning,
+            });
+            break;
+         }
+      }
+      console.log(submission_warning);
+      if (!submission_warning) {
+         let payload = {
+            questionKeys: []
+         };
+         for (let [key, points_array] of this.state.questions) {
+            payload.questionKeys.push({
+               questionKey: key,
+               testcase_weight: points_array[0],
+               function_name_weight: points_array[1]
+            });
+         }
+         this.postData(payload);
+      }
+   }
+
+   handleChange = (event) => {
+      let questions = new Map(this.state.questions);
+      let point_values = [];
+      const testcase_count = event.target.name.split(",")[1];
+      const key = event.target.name.split(",")[2];
+      point_values.push(
+         (0.8 * parseFloat(event.target.value)) / parseFloat(testcase_count)
+      );
+      point_values.push(0.2 * parseFloat(event.target.value));
+      questions.set(key, point_values);
+
+      if (event.target.value == "" || parseFloat(event.target.value) === 0) {
+         questions.delete(key);
+      }
+
+      this.setState({
+         questions: questions,
+      });
+   };
+
+   /* enabled(key) {
+      if (this.state.total_enabled.get(key) != undefined) {
+         return !this.state.total_enabled.get(key);
+      }
+      return false;
+   } */
+
+   componentDidUpdate(prev_props) {
+      if (prev_props.question_keys != this.props.question_keys) {
+         this.setState({
+            question_keys: this.props.question_keys,
+         });
+      }
+   }
+
+   render() {
+      let questionsToRender = [];
+      let counter = 0;
+
+      this.props.questions.forEach((question, i) => {
+         if (this.state.question_keys.has(question.key)) {
+            ++counter;
+            let testcases = [];
+            question.questionData.testcases.forEach((testcase, i) => {
+               testcases.push(
+                  <p key={[testcase, "_", i]}>
+                     {question.questionData.function_name}({testcase.input})→
+                     {testcase.output};
+                  </p>
+               );
+            });
+
+            questionsToRender.push(
+               <div key={question.key} className="question-compiler-element">
+                  <div className="line">
+                     <p>{counter}. </p>
+                     <h3>{question.questionData.function_name}</h3>
+                  </div>
+                  <p>{question.questionData.question}</p>
+                  <h4>Expected Values</h4>
+                  {testcases}
+                  <h4>Expected Types</h4>
+                  <p>
+                     {question.questionData.function_name}(
+                     {question.questionData.types_input.join(", ")})→
+                     {question.questionData.types_output.join(", ")};
+                  </p>
+                  <div className="line">
+                     <p>Points: </p>
+                     <input
+                        type="number"
+                        placeholder="total"
+                        name={[
+                           "total",
+                           question.questionData.testcaseCount,
+                           question.key,
+                        ]}
+                        onChange={this.handleChange}
+                     />
+                     {/* <p> or </p>
+                     <input
+                        type="number"
+                        placeholder="testcases"
+                        name={1}
+                        key={question.key}
+                        testcaseCount={question.questionData.testcaseCount}
+                        onChange={this.handleChange}
+                        disabled={this.enabled(question.key)}
+                     />
+                     <p> </p>
+                     <input
+                        type="number"
+                        placeholder="function name"
+                        name={2}
+                        key={question.key}
+                        testcaseCount={question.questionData.testcaseCount}
+                        onChange={this.handleChange}
+                        disabled={this.enabled(question.key)}
+                     /> */}
+                  </div>
+               </div>
+            );
+         }
+      });
+
+      return (
+         <div id="test-questions" className="outline">
+            <div style={{ height: "80vh" }} className="scrollable-container">
+               {questionsToRender}
+            </div>
+            <div style={{ textAlign : "center"}} hidden={!this.state.submission_warning}>
+               <h3>Non-Zero Values Expected !!!</h3>
+            </div>
+            <div className="wrapper">
+               <input type="submit" onClick={this.handleSubmit} />
+            </div>
+         </div>
+      );
+   }
+}
+
+export default TestCreation;

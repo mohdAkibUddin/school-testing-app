@@ -1,7 +1,7 @@
 import axios from "axios";
 import clone from "just-clone";
 import React from "react";
-import "../question-bank.css";
+import "../../all.css";
 
 class AddQuestion extends React.Component {
    constructor(props) {
@@ -33,11 +33,11 @@ class AddQuestion extends React.Component {
             "content-type": "application/json"
          }
       }).then(response => {
-         console.log('postrequest!', response);
+         this.props.parentCallback();
       });
    }
 
-   handleSubmit(event) {
+   handleSubmit = (event) => {
       event.preventDefault();
       let data = clone(this.state);
       delete data.questions;
@@ -45,7 +45,6 @@ class AddQuestion extends React.Component {
          "questionData" : data
       }
       this.postData(data);
-      this.props.parentCallback();
       this.setState({
          questions: [],
 
@@ -58,7 +57,6 @@ class AddQuestion extends React.Component {
          difficulty: "",
          categories: [""],
       });
-      console.log();
    }
 
    handleChange = (event) => {
@@ -67,21 +65,21 @@ class AddQuestion extends React.Component {
       });
    };
 
-   handleChangeTypes(event) {
+   handleChangeTypes = (event) => {
       const arr = event.target.value.split(" ");
       this.setState({
          [event.target.name]: arr,
       });
    }
 
-   handleChangeCategories(event) {
+   handleChangeCategories = (event) => {
       const arr = event.target.value.split(" ");
       this.setState({
          [event.target.name]: arr,
       });
    }
 
-   handleChangeTestCase(event) {
+   handleChangeTestCase = (event) => {
       const arr = String(event.target.name).split(" ");
       let testcases = this.state.testcases.slice();
       testcases[parseInt(arr[0])][arr[1]] = event.target.value;
@@ -90,7 +88,7 @@ class AddQuestion extends React.Component {
       });
    }
 
-   addBox(event) {
+   addBox = (event) => {
       let testcases = this.state.testcases.slice();
       testcases.push({
          input: "",
@@ -185,7 +183,7 @@ class AddQuestion extends React.Component {
                </label>
                <br />
                <br />
-               <input type="submit" onClick={this.handleSubmit} />
+               <input type="submit"/>
             </form>
          </div>
       );

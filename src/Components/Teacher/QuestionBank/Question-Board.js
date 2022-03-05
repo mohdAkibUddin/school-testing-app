@@ -1,7 +1,7 @@
 import React from "react";
-import "../../question-bank.css";
+import "../../all.css";
 import clone from "just-clone";
-import QuestionCard from "./Child-Components/Question-Card"
+import QuestionCard from "./Question-Card";
 
 class QuestionBoard extends React.Component {
    constructor(props) {
@@ -34,29 +34,38 @@ class QuestionBoard extends React.Component {
       this.handleMatchAll = this.handleMatchAll.bind(this);
    }
 
-   componentDidUpdate(prevProps) {
-      if (prevProps.displayedCategoryBoxes !== this.props.displayedCategoryBoxes) {
+   componentDidUpdate = (prevProps) => {
+      if (
+         prevProps.displayedCategoryBoxes !== this.props.displayedCategoryBoxes
+      ) {
          let displayedCheckBoxes = clone(this.state.displayedCheckBoxes);
          displayedCheckBoxes.categories = this.props.displayedCategoryBoxes;
          this.setState({
             displayedCheckBoxes: displayedCheckBoxes,
          });
       }
-      if (prevProps.questions !==  this.props.questions) {
+      if (prevProps.questions !== this.props.questions) {
          this.setState({
-            questions: this.props.questions
+            questions: this.props.questions,
          });
       }
    }
 
+   actionButtonCallback = question_key => {
+      this.props.actionButtonCallback(question_key)
+   }
+
    renderQuestionCard(value) {
-      console.log(value);
-      if (
-         String(value.function_name)
-            .toLowerCase()
-            .includes(this.state.searchString.toLowerCase())
-      ) {
-         return <QuestionCard value={value.function_name} />;
+      if (String(value.questionData.function_name).toLowerCase().includes(this.state.searchString.toLowerCase())) {
+         return (
+            <QuestionCard
+               question_key={value.key}
+               button_text={this.props.button_text}
+               actionButtonCallback={this.actionButtonCallback}
+               function_name={value.questionData.function_name}
+               question={value.questionData.question}
+            />
+         );
       }
    }
 
@@ -84,8 +93,6 @@ class QuestionBoard extends React.Component {
          name,
          !displayedCheckBoxes[categoryOrDifficulty].get(name)
       );
-
-      console.log(displayedCheckBoxes[categoryOrDifficulty]);
 
       checkedCheckBoxes[categoryOrDifficulty] = new Set();
       for (let [key, value] of displayedCheckBoxes[categoryOrDifficulty]) {
@@ -152,39 +159,54 @@ class QuestionBoard extends React.Component {
       let questionsToRender = this.state.questions;
 
       if (this.state.filteringActive.difficulties) {
-         console.log("filtering.diff")
-         questionsToRender = questionsToRender.filter(question => {
-            return this.state.checkedCheckBoxes.difficulties.has(question.questionData.difficulty)
+         questionsToRender = questionsToRender.filter((question) => {
+            return this.state.checkedCheckBoxes.difficulties.has(
+               question.questionData.difficulty
+            );
          });
       }
       if (this.state.filteringActive.categories) {
          if (this.state.match_all_categories) {
-            questionsToRender = questionsToRender.filter(question => {
+            questionsToRender = questionsToRender.filter((question) => {
                let canAdd = true;
-               this.state.checkedCheckBoxes.categories.forEach((checkedCategory) => {
-                  if (!question.questionData.categories.includes(checkedCategory) &&!this.state.filteringActive.difficulties) {
-                     canAdd = false;
+               this.state.checkedCheckBoxes.categories.forEach(
+                  (checkedCategory) => {
+                     if (
+                        !question.questionData.categories.includes(
+                           checkedCategory
+                        ) &&
+                        !this.state.filteringActive.difficulties
+                     ) {
+                        canAdd = false;
+                     }
                   }
-               });
+               );
                return canAdd;
             });
          } else {
-            questionsToRender = questionsToRender.filter(question => {
+            questionsToRender = questionsToRender.filter((question) => {
                let canAdd = false;
-               question.questionData.categories.forEach(category => {
-                  if (this.state.checkedCheckBoxes.categories.has(category)) canAdd = true;
+               question.questionData.categories.forEach((category) => {
+                  if (this.state.checkedCheckBoxes.categories.has(category))
+                     canAdd = true;
                });
                return canAdd;
             });
          }
       }
-      
-      let questionCards = []
-      questionsToRender.forEach(question => {
-         questionCards.push(<span key={question.key}> {this.renderQuestionCard(question.questionData)} </span>);
-      })
 
-      console.log(this.state.match_all_categories);
+      let questionCards = [];
+      questionsToRender.forEach((question) => {
+         questionCards.push(
+            <span key={question.key}>
+               {" "}
+               {this.renderQuestionCard(question)}{" "}
+            </span>
+         );
+      });
+
+
+
       return (
          <div className="outline">
             <h1>Question Bank</h1>
@@ -219,7 +241,7 @@ class QuestionBoard extends React.Component {
                   {difficultyCheckBoxes}
                </div>
             </div>
-            {questionCards}
+            <div className="scrollable-container">{questionCards}</div>
          </div>
       );
    }
