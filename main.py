@@ -69,6 +69,12 @@ def get_question(key):
     return question if question else jsonify({"error": "Not found"}, 404)
 
 
+@app.route("/question/<key>", methods=["DELETE"])
+def delete_question(key):
+    question_database.delete(key)
+    return jsonify({"status": "ok"}, 200)
+
+
 @app.route('/test', methods=["POST"])
 def create_test():
     keys = request.json["questionKeys"]
@@ -94,6 +100,12 @@ def get_tests():
 def get_test(key):
     test = tests_database.get(key)
     return test if test else jsonify({"error": "Not found"}, 404)
+
+
+@app.route("/test/<key>", methods=["DELETE"])
+def delete_test(key):
+    tests_database.delete(key)
+    return jsonify({"status": "ok"}, 200)
 
 
 @app.route('/autograder', methods=["POST"])
