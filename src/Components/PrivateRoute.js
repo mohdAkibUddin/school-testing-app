@@ -14,7 +14,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       !username &&
       localStorage.getItem("userData")
     ) {
-      console.log(localStorage.getItem("userData"));
       dispatch(JSON.parse(localStorage.getItem("userData")));
     }
   }, [isAuthenticated]);
