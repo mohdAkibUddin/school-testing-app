@@ -3,17 +3,42 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./Components/Login/Login";
 import QuestionCreation from "./Components/Teacher/QuestionBank/Question-Creation";
 import TestCreation from "./Components/Teacher/TestBank/TestCreation";
+import Welcome from "./Components/Student/Welcome";
+import UserState from "./Context/user/UserState";
+import PrivateRoute from "./Components/PrivateRoute.js";
 
 const App = () => {
    return (
-      <Router>
-         <Routes>
-            <Route path="/welcome" />
-            <Route path="/question-bank" element={<QuestionCreation />} />
-            <Route path="/test-creation" element={<TestCreation />} />
-            <Route path="/" element={<Login />} />
-         </Routes>
-      </Router>
+      <UserState>
+         <Router>
+            <Routes>
+               <Route
+                  exact
+                  path="/welcome"
+                  element={
+                     <PrivateRoute component={Welcome} role={"student"} />
+                  }
+               />
+               <Route
+                  exact
+                  path="/question-bank"
+                  element={
+                     <PrivateRoute
+                        component={QuestionCreation}
+                        role={"teacher"}
+                     />
+                  }
+               />
+               <Route
+                  exact
+                  path="/test-creation"
+                  component={TestCreation}
+                  role={"teacher"}
+               />
+               <Route exact path="/" element={<Login />} />
+            </Routes>
+         </Router>
+      </UserState>
    );
 };
 export default App;
