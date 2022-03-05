@@ -47,7 +47,7 @@ const Login = ({ history }) => {
         {renderForm}
         {isAuthenticated ? (
           role == "teacher" ? (
-            <Navigate to="/question-bank" />
+            <Navigate to="/test-creation" />
           ) : (
             <Navigate to="/welcome" />
           )
