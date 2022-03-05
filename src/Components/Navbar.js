@@ -5,7 +5,6 @@ import UserContext from "../Context/user/userContext";
 const Navbar = () => {
   let navigate = useNavigate();
   const { isAuthenticated, role, logoutUser } = useContext(UserContext);
-  let page = "";
 
   const questionPage = () => {
     navigate("/question-bank");

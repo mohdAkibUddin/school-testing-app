@@ -20,9 +20,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 
   return (
     <>
-      {!isAuthenticated &&
-      !loading &&
-      JSON.parse(localStorage.getItem("userData")).dispatch == "LOGOUT" ? (
+      {!isAuthenticated && !loading && username == null ? (
         <Navigate to="/" />
       ) : (
         <Component />
