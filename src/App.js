@@ -6,7 +6,7 @@ import TestCreation from "./Components/Teacher/TestBank/Test-Creation";
 import Welcome from "./Components/Student/Welcome";
 import UserState from "./Context/user/UserState";
 import PrivateRoute from "./Components/PrivateRoute.js";
-
+import Navbar from "./Components/Navbar";
 const App = () => {
    return (
       // <UserState>

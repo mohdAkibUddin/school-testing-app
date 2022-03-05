@@ -37,14 +37,17 @@ const UserState = (props) => {
             tests: userData.tests,
           },
         });
-        localStorage.setItem("userData", {
-          type: GET_USER,
-          payload: {
-            username: loginForm.username,
-            role: userData.role,
-            tests: userData.tests,
-          },
-        });
+        localStorage.setItem(
+          "userData",
+          JSON.stringify({
+            type: GET_USER,
+            payload: {
+              username: loginForm.username,
+              role: userData.role,
+              tests: userData.tests,
+            },
+          })
+        );
       }
     } else {
       // Username not found
@@ -59,7 +62,8 @@ const UserState = (props) => {
 
   const logoutUser = () => {
     dispatch({ dispatch: LOGOUT });
-    localStorage.setItem("userData", initialState);
+    localStorage.setItem("userData", JSON.stringify({ dispatch: LOGOUT }));
+    window.location.reload(false);
   };
 
   return (
