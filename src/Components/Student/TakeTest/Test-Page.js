@@ -9,6 +9,9 @@ class TestPage extends React.Component {
          questions: [],
          student_response: {},
       };
+   }
+
+   componentDidMount = () => {
       this.initializeTest(this.props.test_key);
    }
 
@@ -36,30 +39,27 @@ class TestPage extends React.Component {
    }
 
    handleSubmit = async () => {
+      const handleSubmitHelper = async (data) => {
+         const student_name = this.props.student_name;
+         data.tests[this.props.test_key] = this.state.student_response;
+         const payload = {
+            "tests" : data.tests
+         };
+   
+         await axios.put(`https://w81a61.deta.dev/users/${student_name}`, payload, {
+            headers: {
+               "content-type": "application/json"
+            }
+         });
+      }
+
       const student_name = this.props.student_name;
       await axios.get(`https://w81a61.deta.dev/users/${student_name}`).then(response => {
-         console.log(response);
-         this.handleSubmitHelper(response.data);
+         handleSubmitHelper(response.data);
       });
    }
 
-   handleSubmitHelper = async (data) => {
-      const student_name = this.props.student_name;
-      data.tests[this.props.test_key] = this.state.student_response;
-      const payload = {
-         "tests" : data.tests
-      };
-
-      await axios.put(`https://w81a61.deta.dev/users/${student_name}`, payload, {
-         headers: {
-            "content-type": "application/json"
-         }
-      }).then(response => {
-         axios.get(`https://w81a61.deta.dev/users/${student_name}`).then(response => {
-            console.log(response, "after the put");
-         });
-      });
-   }
+  
 
    handleChange = (event) => {
       let student_response = clone(this.state.student_response);
