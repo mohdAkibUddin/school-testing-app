@@ -10,6 +10,9 @@ class QuestionCreation extends React.Component {
          questions: [],
          displayedCategoryBoxes: new Map(),
       };
+   }
+
+   componentDidMount = () => {
       this.initializeData();
    }
 

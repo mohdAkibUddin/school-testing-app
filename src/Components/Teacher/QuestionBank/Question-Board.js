@@ -7,7 +7,6 @@ class QuestionBoard extends React.Component {
    constructor(props) {
       super(props);
       this.state = {
-         num: 10,
          searchString: "",
          displayedCheckBoxes: {
             categories: props.displayedCategoryBoxes,
