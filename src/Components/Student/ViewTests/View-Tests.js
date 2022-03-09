@@ -51,11 +51,7 @@ class ViewTests extends React.Component {
          });
    };
 
-   handleClick(event) {
-      const path = event.target.name === "take" ? "/take-test" : "/review-test";
-      console.log(event.target.value);
-      return <Link to="/take-test" />;
-   }
+   
 
    render() {
       let reviewable_tests = [];
@@ -69,7 +65,6 @@ class ViewTests extends React.Component {
                type="button"
                name="review"
                value={test_key}
-               onClick={this.handleClickViewable(test_key)}
             />
          );
       });

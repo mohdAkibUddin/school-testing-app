@@ -15,7 +15,7 @@ const App = () => {
   return (
     <UserState>
       <Router>
-         {/* <Navbar />
+         <Navbar />
          <Routes>
             <Route
                exact
@@ -48,8 +48,8 @@ const App = () => {
                element={<ViewGrades />}
             />
          </Routes>
-        <Navbar /> */}
-        <Routes>
+        {/* <Navbar /> */}
+        {/* <Routes>
           <Route
             exact
             path="/view-tests"
@@ -68,7 +68,7 @@ const App = () => {
             element={<PrivateRoute component={TestCreation} role={"teacher"} />}
           />
           <Route exact path="/" element={<Login />} />
-        </Routes>
+        </Routes> */}
       </Router>
     </UserState>
   );
