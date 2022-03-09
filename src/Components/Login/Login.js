@@ -45,13 +45,15 @@ const Login = ({ history }) => {
       <div className="login-form">
         <div className="title">Sign In</div>
         {renderForm}
-        {isAuthenticated ? (role == "teacher" ? (<Navigate to="/test-creation" />) : (<Navigate to="/welcome" />)) : (
+        {isAuthenticated ? (
+          role == "teacher" ? (
+            <Navigate to="/question-bank" />
+          ) : (
+            <Navigate to="/view-tests" />
+          )
+        ) : (
           <div>
-            {errorMessages.message ? (
-              <h1>{errorMessages.message}</h1>
-            ) : (
-              <h1></h1>
-            )}
+            {errorMessages.message ? <h1>{errorMessages.message}</h1> : <></>}
           </div>
         )}
       </div>

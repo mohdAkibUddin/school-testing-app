@@ -20,16 +20,20 @@ const Navbar = () => {
       ) : (
         <div>
           {role === "teacher" ? (
-            <>
+            <div class="Nav">
+              <h1>Welcome Teacher</h1>
               <button onClick={questionPage} type="submit">
                 Question Bank
               </button>
               <button onClick={testPage} type="submit">
                 Create Test
               </button>
-            </>
+            </div>
           ) : (
-            <button type="submit">Student Page</button>
+            <div class="Nav">
+              <h1>Welcome Student</h1>
+              <button type="submit">Student Page</button>
+            </div>
           )}
           <button type="submit" onClick={logoutUser}>
             Log Out
