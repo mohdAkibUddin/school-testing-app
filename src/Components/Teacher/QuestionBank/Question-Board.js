@@ -55,7 +55,7 @@ class QuestionBoard extends React.Component {
       this.props.actionButtonCallback(question_key)
    }
 
-   renderQuestionCard(value) {
+   renderQuestionCard = (value) => {
       if (String(value.questionData.function_name).toLowerCase().includes(this.state.searchString.toLowerCase())) {
          return (
             <QuestionCard
@@ -69,19 +69,19 @@ class QuestionBoard extends React.Component {
       }
    }
 
-   handleSearch(event) {
+   handleSearch = (event) => {
       this.setState({
          [event.target.name]: event.target.value,
       });
    }
 
-   handleChange(event) {
+   handleChange = (event) => {
       this.setState({
          [event.target.name]: event.target.value,
       });
    }
 
-   handleCheckbox(event) {
+   handleCheckbox = (event) => {
       let isFilteringActive = false;
       let displayedCheckBoxes = clone(this.state.displayedCheckBoxes);
       let checkedCheckBoxes = clone(this.state.checkedCheckBoxes);
@@ -112,7 +112,7 @@ class QuestionBoard extends React.Component {
       });
    }
 
-   handleMatchAll(event) {
+   handleMatchAll = () => {
       this.setState({
          match_all_categories: !this.state.match_all_categories,
       });
