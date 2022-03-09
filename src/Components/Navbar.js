@@ -19,23 +19,38 @@ const Navbar = () => {
       {!true ? (
         <></>
       ) : (
-        <div>
+        <nav id="nav">
           {role === "teacher" ? (
             <>
-              <button onClick={questionPage} type="submit">
-                Question Bank
-              </button>
-              <button onClick={testPage} type="submit">
-                Create Test
-              </button>
+              <div id="first">
+                <h1>Welcome Teacher</h1>
+              </div>
+              <div id="second">
+                <button onClick={questionPage} type="submit">
+                  Question Bank
+                </button>
+                <button onClick={testPage} type="submit">
+                  Create Test
+                </button>
+                {/* <button type="submit" onClick={logoutUser}>
+                  Log Out
+                </button> */}
+              </div>
             </>
           ) : (
-            <button type="submit">Student Page</button>
+            <>
+              <div id="first">
+                <h1>Welcome Student</h1>
+              </div>
+              <div id="second">
+                <button type="submit">Student Page</button>
+                {/* <button type="submit" onClick={logoutUser}>
+                  Log Out
+                </button> */}
+              </div>
+            </>
           )}
-          <button type="submit" onClick={"logoutUser"}>
-            Log Out
-          </button>
-        </div>
+        </nav>
       )}
     </>
   );
