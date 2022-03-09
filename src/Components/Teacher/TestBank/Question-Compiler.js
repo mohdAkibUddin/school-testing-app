@@ -35,7 +35,6 @@ class QuestionCompiler extends React.Component {
             break;
          }
       }
-      console.log(submission_warning);
       if (!submission_warning) {
          let payload = {
             questionKeys: []
@@ -62,7 +61,7 @@ class QuestionCompiler extends React.Component {
       point_values.push(0.2 * parseFloat(event.target.value));
       questions.set(key, point_values);
 
-      if (event.target.value == "" || parseFloat(event.target.value) === 0) {
+      if (event.target.value === "" || parseFloat(event.target.value) === 0) {
          questions.delete(key);
       }
 
@@ -71,15 +70,8 @@ class QuestionCompiler extends React.Component {
       });
    };
 
-   /* enabled(key) {
-      if (this.state.total_enabled.get(key) != undefined) {
-         return !this.state.total_enabled.get(key);
-      }
-      return false;
-   } */
-
    componentDidUpdate(prev_props) {
-      if (prev_props.question_keys != this.props.question_keys) {
+      if (prev_props.question_keys !== this.props.question_keys) {
          this.setState({
             question_keys: this.props.question_keys,
          });
@@ -130,26 +122,6 @@ class QuestionCompiler extends React.Component {
                         ]}
                         onChange={this.handleChange}
                      />
-                     {/* <p> or </p>
-                     <input
-                        type="number"
-                        placeholder="testcases"
-                        name={1}
-                        key={question.key}
-                        testcaseCount={question.questionData.testcaseCount}
-                        onChange={this.handleChange}
-                        disabled={this.enabled(question.key)}
-                     />
-                     <p> </p>
-                     <input
-                        type="number"
-                        placeholder="function name"
-                        name={2}
-                        key={question.key}
-                        testcaseCount={question.questionData.testcaseCount}
-                        onChange={this.handleChange}
-                        disabled={this.enabled(question.key)}
-                     /> */}
                   </div>
                </div>
             );
