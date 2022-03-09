@@ -7,6 +7,11 @@ import Welcome from "./Components/Student/Welcome";
 import UserState from "./Context/user/UserState";
 import PrivateRoute from "./Components/PrivateRoute.js";
 import Navbar from "./Components/Navbar";
+import TakeTest from "./Components/Student/TakeTest/Take-Test";
+import ViewTests from "./Components/Student/ViewTests/View-Tests";
+import GradeTests from "./Components/Teacher/GradeTests/Grade-Tests";
+import ViewGrades from "./Components/Student/ViewGrades/View-Grades";
+
 const App = () => {
    return (
       // <UserState>
@@ -41,6 +46,7 @@ const App = () => {
       //    </Router>
       // </UserState>
       <Router>
+         <Navbar />
          <Routes>
             <Route
                exact
@@ -51,6 +57,26 @@ const App = () => {
                exact
                path="/test-creation"
                element={<TestCreation />}
+            />
+            <Route
+               exact
+               path="/take-test"
+               element={<TakeTest />}
+            />
+            <Route
+               exact
+               path="/view-tests"
+               element={<ViewTests />}
+            />
+            <Route
+               exact
+               path="/grade-tests"
+               element={<GradeTests />}
+            />
+            <Route
+               exact
+               path="/view-grades"
+               element={<ViewGrades />}
             />
          </Routes>
       </Router>

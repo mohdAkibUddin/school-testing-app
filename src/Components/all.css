@@ -63,3 +63,7 @@
     justify-content: center;
     margin-top: 1vh;
 }
+
+table, th, td {
+    border: 1px solid;
+}
