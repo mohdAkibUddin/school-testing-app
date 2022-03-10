@@ -13,7 +13,8 @@ class ViewTests extends React.Component {
    }
 
    componentDidMount = () => {
-      this.initializeTests(this.props.student_name || "student");
+      console.log(JSON.parse(localStorage.getItem("userData")).payload.username)
+      this.initializeTests(JSON.parse(localStorage.getItem("userData")).payload.username);
    };
 
    initializeTests = async () => {
@@ -22,7 +23,7 @@ class ViewTests extends React.Component {
       await axios.get("https://w81a61.deta.dev/test").then((response) => {
          const tests = response.data[0];
          for (let test of tests) {
-            test.gradesReleased
+            test.gradesReleased[0]
                ? graded_tests.add(test.key)
                : ungraded_tests.set(test.key, true);
          }
@@ -35,7 +36,7 @@ class ViewTests extends React.Component {
    };
 
    initializeTakeableTests = async () => {
-      const student_name = this.props.student_name || "student";
+      const student_name = JSON.parse(localStorage.getItem("userData")).payload.username
       let ungraded_tests = new Map(this.state.ungraded_tests);
       await axios
          .get(`https://w81a61.deta.dev/users/${student_name}`)
@@ -43,7 +44,9 @@ class ViewTests extends React.Component {
             const tests = response.data.tests;
             console.log(tests);
             for (let test_key in tests) {
-               ungraded_tests.set(test_key, false);
+               if (!this.state.graded_tests.has(test_key)) {
+                  ungraded_tests.set(test_key, false);
+               }
             }
             this.setState({
                ungraded_tests: ungraded_tests,
@@ -60,23 +63,33 @@ class ViewTests extends React.Component {
 
       this.state.graded_tests.forEach((test_key) => {
          reviewable_tests.push(
-            <Link to={{
-               pathname: "/view-grades",
-               search: test_key
-            }}>
-               <input value={test_key} type="button" key={test_key} />
-            </Link>
+            <div key={test_key}>
+               <Link to={{
+                  pathname: "/view-grades",
+                  search: test_key
+               }}>
+                  <input value={test_key} type="button" key={test_key} />
+               </Link>
+               <br />
+               <br />
+            </div>
+            
          );
       });
 
       for (let [test_key, takeable] of this.state.ungraded_tests) {
          let element = (
-            <Link to={{
-               pathname: "/take-test",
-               search: test_key
-            }}>
-               <input value={test_key} type="button" key={test_key} disabled={!takeable} />
-            </Link>
+            <>
+               <Link to={{
+                  pathname: "/take-test",
+                  search: test_key
+               }}>
+                  <input value={test_key} type="button" key={test_key} disabled={!takeable} />
+               </Link>
+               <br />
+               <br />
+            </>
+            
          );
          takeable
             ? takeable_tests.push(element)
@@ -85,9 +98,18 @@ class ViewTests extends React.Component {
 
       return (
          <div className="horizontal-aligned-container">
-            <div className="outline-view-tests">Review{reviewable_tests}</div>
-            <div className="outline-view-tests">{takeable_tests}</div>
-            <div className="outline-view-tests">{taken_ungraded_tests}</div>
+            <div className="outline-view-tests">
+               <h3>Review Graded Exams</h3>
+               {reviewable_tests}
+            </div>
+            <div className="outline-view-tests">
+               <h3>Take Exams</h3>
+               {takeable_tests}
+            </div>
+            <div className="outline-view-tests">
+               <h3>Awaiting Grade</h3>
+               {taken_ungraded_tests}
+            </div>
          </div>
       );
    }

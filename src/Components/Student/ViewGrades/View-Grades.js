@@ -10,7 +10,7 @@ const ViewGrades = () => {
    return (
       <GradesPage
          test_key={test_key}
-         student_name={"student"}
+         student_name={JSON.parse(localStorage.getItem("userData")).payload.username}
       />
    );
 }

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
 import clone from "just-clone";
+import { Link } from "react-router-dom";
 
 class TestPage extends React.Component {
    constructor(props) {
@@ -44,7 +45,10 @@ class TestPage extends React.Component {
       const handleSubmitHelper = async (data) => {
          const student_name = this.props.student_name;
          data.tests[this.props.test_key] = this.state.student_response;
+         console.log(data.testTaken)
+         let tests_taken = [...data.testTaken, this.props.test_key];
          const payload = {
+            testTaken: tests_taken,
             tests: data.tests,
          };
 
@@ -70,7 +74,8 @@ class TestPage extends React.Component {
    handleChange = (event) => {
       if (event.keyCode === 9) {
          event.preventDefault();
-         event.target.value += '\t';
+         event.target.value = event.target.value.substring(0, event.target.selectionStart) + '\t' + event.target.value.substring(event.target.selectionStart);
+         event.target.selection += 1;
       }
       let student_response = clone(this.state.student_response);
       student_response[event.target.name] = event.target.value;
@@ -80,6 +85,7 @@ class TestPage extends React.Component {
    };
 
    render() {
+      console.log(this.state.student_response)
       let questionsToRender = [];
       let counter = 0;
 
@@ -132,11 +138,13 @@ class TestPage extends React.Component {
             <div className="padded">
                {questionsToRender}
                <div className="wrapper">
-                  <input
-                     type="submit"
-                     onClick={this.handleSubmit}
-                     hidden={this.state.questions.length === 0}
-                  />
+                  <Link to="/view-tests">
+                     <input
+                        type="submit"
+                        onClick={this.handleSubmit}
+                        hidden={this.state.questions.length === 0}
+                     />
+                  </Link>
                </div>
             </div>
          </>

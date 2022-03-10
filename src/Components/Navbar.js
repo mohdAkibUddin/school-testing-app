@@ -17,6 +17,10 @@ const Navbar = () => {
     navigate("/view-tests");
   };
 
+  const gradeTestpage = () => {
+    navigate("/grade-tests");
+  };
+
   return (
     <>
       {!isAuthenticated ? (
@@ -34,6 +38,9 @@ const Navbar = () => {
                 </button>
                 <button onClick={testPage} type="submit">
                   Create Test
+                </button>
+                <button onClick={gradeTestpage} type="submit">
+                  Grade Tests
                 </button>
                 <button type="submit" onClick={logoutUser}>
                   Log Out

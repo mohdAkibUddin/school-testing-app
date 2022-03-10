@@ -10,6 +10,9 @@ import Navbar from "./Components/Navbar";
 import TakeTest from "./Components/Student/TakeTest/Take-Test";
 import GradeTests from "./Components/Teacher/GradeTests/Grade-Tests";
 import ViewGrades from "./Components/Student/ViewGrades/View-Grades";
+import SelectStudent from "./Components/Teacher/ModifyGrades/Select-Student";
+import ModifyGrades from "./Components/Teacher/ModifyGrades/Modify-Grades";
+import ModifyStudentGrades from "./Components/Teacher/ModifyGrades/Modify-Student-Grade";
 
 const App = () => {
   return (
@@ -81,10 +84,22 @@ const App = () => {
             path="/test-creation"
             element={<PrivateRoute component={TestCreation} role={"teacher"} />}
           />
+
+          <Route
+            exact
+            path="/modify-grades"
+            element={<PrivateRoute component={ModifyGrades} role={"teacher"} />}
+          />
+          <Route
+            exact
+            path="/modify-student-grades"
+            element={<PrivateRoute component={ModifyStudentGrades} role={"teacher"} />}
+          />
           <Route exact path="/" element={<Login />} />
         </Routes>
       </Router>
     </UserState>
   );
 };
+
 export default App;

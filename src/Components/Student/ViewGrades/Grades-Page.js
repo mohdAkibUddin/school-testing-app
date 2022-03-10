@@ -1,73 +1,32 @@
 import React from "react";
 import "../../all.css";
+import axios from "axios";
 
 class GradesPage extends React.Component {
    constructor(props) {
       super(props);
-      this.data = {
-         the_LITERAL_test_key: {
-            the_LITERAL_question_key: {
-               function_name: {
-                  function_name: "the name of the function",
-                  student_function_name: "the name the student submitted",
-                  points_earned: 0,
-                  points: 5,
-               },
-               testcases: [
-                  {
-                     student_output:
-                        "the output that the students code generated",
-                     expected_output: "the output you compared against",
-                     points_earned: "number of points they got",
-                     points: "how much the testcase was worth",
-                     input: "input",
-                  },
-                  {
-                     student_output:
-                        "the output that the students code generated",
-                     expected_output: "the output you compared against",
-                     points_earned: "number of points they got",
-                     points: "how much the testcase was worth",
-                     input: "input",
-                  },
-               ],
-            },
-            the_LITERAL_question_key2: {
-               function_name: {
-                  function_name: "the name of the function",
-                  student_function_name: "the name the student submitted",
-                  points_earned: 5,
-                  points: 5,
-               },
-               testcases: [
-                  {
-                     student_output:
-                        "the output that the students code generated",
-                     expected_output: "the output you compared against",
-                     points_earned: "number of points they got",
-                     points: "how much the testcase was worth",
-                     input: "input",
-                  },
-                  {
-                     student_output:
-                        "the output that the students code generated",
-                     expected_output: "the output you compared against",
-                     points_earned: "number of points they got",
-                     points: "how much the testcase was worth",
-                     input: "input",
-                  },
-               ],
-            },
-         },
-      };
       this.state = {
-         data: this.data,
+         data: {}
       };
+   }
+
+   componentDidMount = () => {
+      this.getGrades();
+   }
+
+   getGrades = async () => {
+      const student_name = this.props.student_name;
+      await axios.get(`https://w81a61.deta.dev/users/${student_name}`).then(response => {
+         const data = response.data.grades[this.props.test_key];
+         this.setState({
+            data: data
+         });
+      });
    }
 
    render() {
       let tables = [];
-      const data = this.state.data.the_LITERAL_test_key;
+      const data = this.state.data;
       for (let question_key in data) {
          const question_data = data[question_key];
          const expected_function_name = question_data.function_name.function_name;
@@ -129,9 +88,9 @@ class GradesPage extends React.Component {
          }
 
       }
-      return <>
+      return <div className="padded">
          {tables}
-      </>;
+      </div>;
    }
 }
 
