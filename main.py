@@ -100,6 +100,7 @@ def create_test():
                          "testcase_weight": key["testcase_weight"], "function_name_weight": key["function_name_weight"]})
 
     test = tests_database.put({
+        "testName": request.json["testName"]
         "testData": questions,
         "gradesReleased": False
     })
