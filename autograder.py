@@ -37,12 +37,6 @@ def gradeQuestion(rawSol, questionData):
         ana = AnalyzeFunctions()
         ana.visit(tree)
     
-    # importTests = {
-    #     "types":["str", "List[str]"],
-    #     "test_1":{"input":["1","a,b,c"], "output":"a1b1c1"},
-    #     "test_2":{"input":["Odd","alpha,beta,gamma"], "output":"alphaOddbetaOddgammaOdd"}
-    # }
-
     runner = [] # builder for command that will be run
     argPosType = [] # positions and type of where test case values must be placed in runner
 
@@ -71,13 +65,30 @@ def gradeQuestion(rawSol, questionData):
         fixInputTypes(paraType, runner, argPosType)
         if i != len(questionData["questionData"]["types_input"])-1: runner.append(",")
 
-    runner.append("))\n")
+    runner.append("), end="")\n")
 
     def applyQuotes(word):
         return f"\"{word}\""
+    
+    questionGrade = {}
+    functionName = {}
+    functionName["function_name"] = questionData["questionData"]["function_name"]
+    functionName["points"] = questionData["function_name_weight"]
+
+    if ana.valid:
+        functionName["student_function_name"] = ana.name
+        functionName["points_earned"] = 0 if ana.name != functionName["function_name"] else functionName["points"]
+    else:
+        functionName["student_function_name"] = "Parsing Error"
+        functionName["points_earned"] = 0
+
+    questionGrade["function_name"] = functionName
+    questionGrade["testcases"] = []
 
     for tc in questionData["questionData"]["testcases"]:
+        tcBreakdown = {}
         comBuild = [sys.executable, "-c"]
+
         for j,v in enumerate(parseInput(tc["input"])):
             if argPosType[j][1] == "List[str]" or argPosType[j][1] == "List[string]":
                 runner[argPosType[j][0]] = ",".join(list(map(applyQuotes, v.split(","))))
@@ -89,16 +100,34 @@ def gradeQuestion(rawSol, questionData):
         result = subprocess.run(comBuild, capture_output=True, text=True)
         print(f"stdout:{result.stdout}")
         print(f"stderr:{result.stderr}", end="\n\n")
+        
+        tcBreakdown["input"] = tc["input"]
+        tcBreakdown["expected_output"] = tc["output"]
+        tcBreakdown["points"] = questionData["testcase_weight"]
 
-def gradeStudent(studentProfile, test):
+        tcBreakdown["student_output"] = "CODE ERROR" if result.stderr else result.stdout
+        tcBreakdown["points_earned"] = tcBreakdown["points"] if result.stdout == tc["output"] else 0
+
+        questionGrade["testcases"].append(tcBreakdown)
+    
+    return questionGrade
+
+def gradeStudent(studentProfile, test, grades):
     tKey = test["key"]
+    testGrade = {}
+
     for question in test["testData"]:
         qKey = question["key"]
-        gradeQuestion(studentProfile["tests"][tKey][qKey], question)
+        questionGrade = gradeQuestion(studentProfile["tests"][tKey][qKey], question)
+        testGrade[qKey] = questionGrade
+    
+    grades[tKey] = testGrade
+    loginCredentials_db.put(grades, studentProfile["key"])
 
 def autograder(testKey):
     test = tests_db.get(testKey)
     students = loginCredentials_db.fetch([{"role":"student", "test?contains":testKey}])
     for s in students:
-        gradeStudent(s[testKey], test)
+        oldGrades = {} if "grades" not in s else s["grades"]
+        gradeStudent(s[testKey], test, oldGrades)
     return loginCredentials_db.fetch([{"role":"student", "test?contains":testKey}])
