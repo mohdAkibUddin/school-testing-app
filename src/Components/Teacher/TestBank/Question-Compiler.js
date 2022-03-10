@@ -14,6 +14,7 @@ class QuestionCompiler extends React.Component {
    }
 
    async postData(data) {
+      data.testName = this.state.test_name
       await axios.post("https://w81a61.deta.dev/test", data, {
          headers: {
             "content-type": "application/json"
@@ -137,6 +138,7 @@ class QuestionCompiler extends React.Component {
 
       return (
          <div id="test-questions" className="outline">
+            <h4>Test Name:</h4>
             <input type="text" value={this.state.test_name} onChange={this.handleTestName}/>
             <div style={{ height: "80vh" }} className="scrollable-container">
                {questionsToRender}
