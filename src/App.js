@@ -15,8 +15,8 @@ const App = () => {
   return (
     <UserState>
       <Router>
-         <Navbar />
-         <Routes>
+        <Navbar />
+        {/* <Routes>
             <Route
                exact
                path="/question-bank"
@@ -47,13 +47,27 @@ const App = () => {
                path="/view-grades"
                element={<ViewGrades />}
             />
-         </Routes>
-        {/* <Navbar /> */}
-        {/* <Routes>
+         </Routes> */}
+        <Routes>
           <Route
             exact
             path="/view-tests"
             element={<PrivateRoute component={ViewTests} role={"student"} />}
+          />
+          <Route
+            exact
+            path="/take-test"
+            element={<PrivateRoute component={TakeTest} role={"student"} />}
+          />
+          <Route
+            exact
+            path="/view-grades"
+            element={<PrivateRoute component={ViewGrades} role={"student"} />}
+          />
+          <Route
+            exact
+            path="/grade-tests"
+            element={<PrivateRoute component={GradeTests} role={"teacher"} />}
           />
           <Route
             exact
@@ -68,7 +82,7 @@ const App = () => {
             element={<PrivateRoute component={TestCreation} role={"teacher"} />}
           />
           <Route exact path="/" element={<Login />} />
-        </Routes> */}
+        </Routes>
       </Router>
     </UserState>
   );

@@ -4,8 +4,7 @@ import UserContext from "../Context/user/userContext";
 
 const Navbar = () => {
   let navigate = useNavigate();
-  // const { isAuthenticated, role, logoutUser } = useContext(UserContext);
-  const role = "teacher"
+  const { isAuthenticated, role, logoutUser } = useContext(UserContext);
 
   const questionPage = () => {
     navigate("/question-bank");
@@ -16,7 +15,7 @@ const Navbar = () => {
 
   return (
     <>
-      {!true ? (
+      {!isAuthenticated ? (
         <></>
       ) : (
         <nav id="nav">
@@ -32,9 +31,9 @@ const Navbar = () => {
                 <button onClick={testPage} type="submit">
                   Create Test
                 </button>
-                {/* <button type="submit" onClick={logoutUser}>
+                <button type="submit" onClick={logoutUser}>
                   Log Out
-                </button> */}
+                </button>
               </div>
             </>
           ) : (
@@ -44,9 +43,9 @@ const Navbar = () => {
               </div>
               <div id="second">
                 <button type="submit">Student Page</button>
-                {/* <button type="submit" onClick={logoutUser}>
+                <button type="submit" onClick={logoutUser}>
                   Log Out
-                </button> */}
+                </button>
               </div>
             </>
           )}

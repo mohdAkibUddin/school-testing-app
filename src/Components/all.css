@@ -27,6 +27,7 @@ body{
 }
 
 .horizontal-aligned-container {
+    padding-top: 50px;
     display: flex;
     flex-direction: row;
     padding-top: 5vh;
@@ -67,14 +68,6 @@ body{
     display: flex;
     justify-content: center;
     margin-top: 1vh;
-}
-
-.padded {
-    padding: 50px;
-}
-
-table, th, td {
-    border: 1px solid;
 }
 
 #nav {
