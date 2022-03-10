@@ -46,12 +46,12 @@ def delete_user(key):
     loginCredentials_db.delete(key)
     return jsonify({"status": "ok"}, 200)
 
-# @app.route("/users/username", methods=["Get"])
-# def get_user_info():
-#     username = request.args["username"]
-#     users = loginCredentials_db.fetch({"username?contains":username})
-#     user = users.items
-#     return jsonify(user, 201)
+
+@app.route("/users/fetch", methods=["Get"])
+def get_user_info():
+    users = loginCredentials_db.fetch(request.json["test"])
+    user = users.items
+    return jsonify(user, 201)
 
 
 @app.route('/question', methods=["POST"])
