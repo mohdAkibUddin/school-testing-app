@@ -1,6 +1,7 @@
 from deta import Deta
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from autograder import autograder
 
 app = Flask(__name__)
 CORS(app)
@@ -128,11 +129,10 @@ def delete_test(key):
     return jsonify({"status": "ok"}, 200)
 
 
-@app.route('/autograder', methods=["POST"])
-def grade_test():
-    keys = request.json["testkey"]
-    gradeTest()
-    return test["key"]
+@app.route('/autograder/<key>', methods=["POST"])
+def grade_test(key):
+    studentGrades = autograder(key)
+    return jsonify(studentGrades, 201)
 
 
 @app.get("/")
