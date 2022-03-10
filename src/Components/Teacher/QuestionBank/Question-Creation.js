@@ -47,7 +47,7 @@ class QuestionCreation extends React.Component {
                questions={this.state.questions}
             />
             <QuestionBoard
-               button_text={"View"}
+               // button_text={"View"}
                displayedCategoryBoxes={this.state.displayedCategoryBoxes}
                questions={this.state.questions}
             />

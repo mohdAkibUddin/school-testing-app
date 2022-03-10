@@ -9,6 +9,7 @@ class QuestionCompiler extends React.Component {
          questions: new Map(),
          question_keys: props.question_keys,
          submission_warning: false,
+         test_name: ""
       };
    }
 
@@ -70,6 +71,12 @@ class QuestionCompiler extends React.Component {
       });
    };
 
+   handleTestName = (event) => {
+      this.setState({
+         test_name: event.target.value
+      })
+   }
+
    componentDidUpdate(prev_props) {
       if (prev_props.question_keys !== this.props.question_keys) {
          this.setState({
@@ -130,6 +137,7 @@ class QuestionCompiler extends React.Component {
 
       return (
          <div id="test-questions" className="outline">
+            <input type="text" value={this.state.test_name} onChange={this.handleTestName}/>
             <div style={{ height: "80vh" }} className="scrollable-container">
                {questionsToRender}
             </div>

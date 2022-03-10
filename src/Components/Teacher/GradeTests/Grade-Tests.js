@@ -8,6 +8,7 @@ class GradeTests extends React.Component {
       super(props);
       this.state = {
          tests: new Map() /* boolean ? graded : not_graded */,
+         test_names: new Map()
       };
    }
 
@@ -17,14 +18,18 @@ class GradeTests extends React.Component {
 
    initializeTests = async () => {
       let tests = new Map();
+      const test_names = new Map()
       await axios.get("https://w81a61.deta.dev/test").then((response) => {
          const test_keys = response.data[0];
+         console.log(test_keys)
          for (let test of test_keys) {
             tests.set(test.key, test.gradesReleased[1]);
+            test_names.set(test.key, test.testName);
          }
       });
       this.setState({
          tests: tests,
+         test_names: test_names
       });
    };
 
@@ -61,7 +66,7 @@ class GradeTests extends React.Component {
                <div key={test_key}>
                   <input
                      type="submit"
-                     value={test_key}
+                     value={this.state.test_names.get(test_key)}
                      onClick={() => {this.handleClick(test_key)}}
                   />
                   <br />
@@ -77,8 +82,8 @@ class GradeTests extends React.Component {
                   }}>
                      <input
                         type="submit"
-                        value={test_key}
-                     />dd
+                        value={this.state.test_names.get(test_key)}
+                     />
                   </Link>
                   <br />
                   <br />

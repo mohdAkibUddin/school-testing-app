@@ -1,3 +1,4 @@
+import axios from "axios";
 import React from "react";
 import "../../all.css";
 
@@ -10,6 +11,11 @@ class QuestionCard extends React.Component {
       this.props.actionButtonCallback(this.props.question_key)
    }
 
+   handleDelete = async () => {
+      const question_key = this.props.question_key
+      axios.delete(`https://w81a61.deta.dev/question/${question_key}`);
+   }
+
    render() {
       const p_tag = {margin: "1em"};
       return (
@@ -20,7 +26,7 @@ class QuestionCard extends React.Component {
                </div>
                <div>{this.props.function_name}</div>
                <div>
-                  <button>delete</button>
+                  <input type="button" value="Delete" onClick={this.handleDelete}/>
                </div>
             </div>
             <p style={p_tag}>{this.props.question}</p>

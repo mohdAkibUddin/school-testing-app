@@ -17,6 +17,7 @@ const ModifyStudentGrades = () => {
 
    const [full_payload, setFullPayLoad] = useState({});
    const [data, setData] = useState({});
+   const [comment, setComment] = useState("");
 
    useEffect(() => {
       getGrades();
@@ -29,6 +30,21 @@ const ModifyStudentGrades = () => {
       data_clone[question_key].testcases[index].points_earned = parseFloat(event.target.value);
       setData(data_clone);
    }
+
+   const handleChangeFunctionName = (event) => {
+      let data_clone = clone(data);
+      console.log(data_clone)
+      const question_key = event.target.name.split(',')[0];
+      const function_name = event.target.name.split(',')[1];
+      console.log(question_key, function_name)
+
+      data_clone[question_key].function_name.points_earned = parseFloat(event.target.value);
+      setData(data_clone);
+   }
+
+   const handleComment = (event) => {
+      setComment(event.target.value);
+   } 
 
    const getGrades = async () => {
       const student_name = params.student_name;
@@ -43,6 +59,7 @@ const ModifyStudentGrades = () => {
 
    const updateGrades = async () => {
       full_payload[params.test_key] = data;
+      full_payload.comment = comment;
       const pl = {
          "grades": full_payload
       }
@@ -80,7 +97,8 @@ const ModifyStudentGrades = () => {
             <td>{expected_function_name}</td>
             <td>{student_function_name}</td>
             <td>
-               {points_earned}/{points_total}
+               <input name={[question_key, expected_function_name]} type="number" value={points_earned} onChange={handleChangeFunctionName}/>
+               /{points_total}
             </td>
          </tr>
       );
@@ -137,6 +155,8 @@ const ModifyStudentGrades = () => {
       <div className="padded">
          {tables}
          <h2>{points_counter}/{total_points}</h2>
+         <h4>Add Comment</h4>
+         <textarea name="Comment" cols="30" rows="10" value={comment} onChange={handleComment}></textarea>
          <input type="button" value="Update" onClick={updateGrades}/>
       </div>
    );

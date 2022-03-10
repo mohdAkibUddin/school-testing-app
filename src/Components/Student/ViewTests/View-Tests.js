@@ -9,6 +9,7 @@ class ViewTests extends React.Component {
       this.state = {
          graded_tests: new Set(),
          ungraded_tests: new Map() /* boolean ? takeable : untakeable */,
+         test_names: new Map()
       };
    }
 
@@ -20,17 +21,18 @@ class ViewTests extends React.Component {
    initializeTests = async () => {
       let graded_tests = new Set();
       let ungraded_tests = new Map();
+      let test_names = new Map();
       await axios.get("https://w81a61.deta.dev/test").then((response) => {
          const tests = response.data[0];
          for (let test of tests) {
-            test.gradesReleased[0]
-               ? graded_tests.add(test.key)
-               : ungraded_tests.set(test.key, true);
+            test.gradesReleased[0] ? graded_tests.add(test.key): ungraded_tests.set(test.key, true);
+            test_names.set(test.key, test.testName);
          }
       });
       this.setState({
          graded_tests: graded_tests,
          ungraded_tests: ungraded_tests,
+         test_names: test_names
       });
       this.initializeTakeableTests();
    };
@@ -68,7 +70,7 @@ class ViewTests extends React.Component {
                   pathname: "/view-grades",
                   search: test_key
                }}>
-                  <input value={test_key} type="button" key={test_key} />
+                  <input value={this.state.test_names.get(test_key)} type="button" key={test_key} />
                </Link>
                <br />
                <br />
@@ -84,7 +86,7 @@ class ViewTests extends React.Component {
                   pathname: "/take-test",
                   search: test_key
                }}>
-                  <input value={test_key} type="button" key={test_key} disabled={!takeable} />
+                  <input value={this.state.test_names.get(test_key)} type="button" key={test_key} disabled={!takeable} />
                </Link>
                <br />
                <br />
