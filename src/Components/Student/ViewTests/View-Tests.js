@@ -60,12 +60,12 @@ class ViewTests extends React.Component {
 
       this.state.graded_tests.forEach((test_key) => {
          reviewable_tests.push(
-            <input
-               key={test_key}
-               type="button"
-               name="review"
-               value={test_key}
-            />
+            <Link to={{
+               pathname: "/view-grades",
+               search: test_key
+            }}>
+               <input value={test_key} type="button" key={test_key} />
+            </Link>
          );
       });
 
