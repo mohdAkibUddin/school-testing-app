@@ -69,7 +69,7 @@ def gradeQuestion(rawSol, questionData):
         if i != len(questionData["questionData"]["types_input"])-1:
             runner.append(",")
 
-    runner.append("), end="")\n")
+    runner.append("), end=\"\")\n")
 
     def applyQuotes(word):
         return f"\"{word}\""
