@@ -30,7 +30,7 @@ class AnalyzeFunctions(ast.NodeVisitor):
 def gradeQuestion(rawSol, questionData):
 
     # needed to read the string as code
-    solution = bytes(rawSol, "utf-8").decode("unicode_escape")
+    solution = bytes(rawSol, "utf-8").decode("unicode_escape") if not rawSol else ""
 
     try:
         tree = ast.parse(solution)
