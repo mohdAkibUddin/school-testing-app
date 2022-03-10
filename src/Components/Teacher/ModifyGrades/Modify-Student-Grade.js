@@ -17,6 +17,8 @@ const ModifyStudentGrades = () => {
    const [full_payload, setFullPayLoad] = useState({});
    const [data, setData] = useState({});
    const [comment, setComment] = useState("");
+   const [questions, setQuestions] = useState(new Map());
+   const [student_responses, setStudentResponses] = useState({});
 
    useEffect(() => {
       getGrades();
@@ -47,7 +49,7 @@ const ModifyStudentGrades = () => {
       setComment(event.target.value);
    };
 
-   const getGrades = async () => {
+  /*  const getGrades = async () => {
       const student_name = params.student_name;
       await axios
          .get(`https://w81a61.deta.dev/users/${student_name}`)
@@ -56,6 +58,33 @@ const ModifyStudentGrades = () => {
             setData(payload);
             console.log(payload, "teh payload on get");
             setFullPayLoad(response.data.grades);
+            setComment(response.data.grades[params.test_key].comment || "");
+         });
+   }; */
+
+
+   const getGrades = async () => {
+      const getQuestions = async () => {
+         let questions_copy = new Map();
+         await axios
+            .get("https://w81a61.deta.dev/question")
+            .then((response) => {
+               for (let d of response.data[0]) {
+                  questions_copy.set(d.key, d.questionData);
+               }
+               setQuestions(questions_copy)
+            });
+      };
+
+      const student_name = params.student_name;
+      const test_key = params.test_key;
+      await axios
+         .get(`https://w81a61.deta.dev/users/${student_name}`)
+         .then((response) => {
+            getQuestions();
+            setData(response.data.grades[params.test_key]);
+            setFullPayLoad(response.data.grades);
+            setStudentResponses(response.data.tests[test_key])
             setComment(response.data.grades[params.test_key].comment || "");
          });
    };
@@ -116,10 +145,14 @@ const ModifyStudentGrades = () => {
             </tr>
          );
          tablerows.push(function_name_row);
-
+         const question_text = questions.has(question_key) ? questions.get(question_key).question : "";
+         
          let table = (
             <div key={question_key}>
                <br />
+               <h4>Student Response:</h4>
+               <p>Question:{question_text}</p>
+               <pre>{student_responses[question_key]}</pre>
                <table>
                   <thead>
                      <tr>
