@@ -15,7 +15,7 @@ body{
     width: 47vw;
     margin: 1vh;
     padding: 4vh;
-    height: 88vh;
+    height: 82vh;
 }
 
 .outline-view-tests {
@@ -29,6 +29,7 @@ body{
 .horizontal-aligned-container {
     display: flex;
     flex-direction: row;
+    padding-top: 5vh;
 }
 
 .horizontal-aligned-container > div {
@@ -36,7 +37,7 @@ body{
 }
 
 .scrollable-container {
-    height: 55vh;
+    height: 52vh;
     overflow-y: scroll;
 }
 
@@ -68,15 +69,20 @@ body{
     margin-top: 1vh;
 }
 
+.padded {
+    padding: 50px;
+}
+
 table, th, td {
     border: 1px solid;
 }
+
 #nav {
     display: flex;
     flex-direction: row;
     position: fixed;
     height: 50px;
-    z-index: 999;
+    z-index: 0;
     width: 100%;
     background-color: #5597b4;
     box-shadow: 0 1px 1px #ccc;

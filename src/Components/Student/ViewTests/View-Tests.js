@@ -85,7 +85,7 @@ class ViewTests extends React.Component {
 
       return (
          <div className="horizontal-aligned-container">
-            <div className="outline-view-tests">{reviewable_tests}</div>
+            <div className="outline-view-tests">Review{reviewable_tests}</div>
             <div className="outline-view-tests">{takeable_tests}</div>
             <div className="outline-view-tests">{taken_ungraded_tests}</div>
          </div>
