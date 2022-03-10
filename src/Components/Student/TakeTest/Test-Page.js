@@ -125,13 +125,15 @@ class TestPage extends React.Component {
 
     return (
       <>
-        {questionsToRender}
-        <div className="wrapper">
-          <input
-            type="submit"
-            onClick={this.handleSubmit}
-            hidden={this.state.questions.length === 0}
-          />
+        <div className="padded">
+          {questionsToRender}
+          <div className="wrapper">
+            <input
+              type="submit"
+              onClick={this.handleSubmit}
+              hidden={this.state.questions.length === 0}
+            />
+          </div>
         </div>
       </>
     );
