@@ -16,6 +16,8 @@ def create_user():
     user = loginCredentials_db.put({
         "password": request.args["password"],
         "role": request.args["role"],
+        "testTaken": []
+        "grades": {}
         "tests": {}
     }, request.args["username"])
 
