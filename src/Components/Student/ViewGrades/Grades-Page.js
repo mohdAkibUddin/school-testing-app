@@ -1,13 +1,16 @@
 import React from "react";
 import "../../all.css";
 import axios from "axios";
+import clone from "just-clone";
 
 class GradesPage extends React.Component {
    constructor(props) {
       super(props);
       this.state = {
          data: {},
-         comment: ""
+         student_responses: {},
+         comment: "",
+         questions: new Map(),
       };
    }
 
@@ -16,14 +19,31 @@ class GradesPage extends React.Component {
    };
 
    getGrades = async () => {
+      const getQuestions = async () => {
+         let questions = new Map();
+         await axios
+            .get("https://w81a61.deta.dev/question")
+            .then((response) => {
+               for (let d of response.data[0]) {
+                  questions.set(d.key, d.questionData);
+               }
+               this.setState({
+                  questions: questions,
+               });
+            });
+      };
+
       const student_name = this.props.student_name;
       await axios
          .get(`https://w81a61.deta.dev/users/${student_name}`)
          .then((response) => {
+            getQuestions();
             const data = response.data.grades[this.props.test_key];
+            const student_responses = response.data.tests[this.props.test_key];
             this.setState({
                data: data,
-               comment: data.comment || ""
+               student_responses: student_responses,
+               comment: data.comment || "",
             });
          });
    };
@@ -31,7 +51,6 @@ class GradesPage extends React.Component {
    render() {
       let total_points = 0;
       let points_counter = 0;
-
       let tables = [];
       const data = this.state.data;
       for (let question_key in data) {
@@ -52,16 +71,18 @@ class GradesPage extends React.Component {
                   <td>{expected_function_name}</td>
                   <td>{student_function_name}</td>
                   <td>
-                     {points_earned}
-                     /{points_total}
+                     {points_earned}/{points_total}
                   </td>
                </tr>
             );
             tablerows.push(function_name_row);
-
+            const question_text = this.state.questions.has(question_key) ? this.state.questions.get(question_key).question : "";
             let table = (
                <div key={question_key}>
                   <br />
+                  <h4>Student Response:</h4>
+                  <p>Question: {question_text}</p>
+                  <pre>{this.state.student_responses[question_key]}</pre>
                   <table>
                      <thead>
                         <tr>
@@ -96,8 +117,7 @@ class GradesPage extends React.Component {
                      </td>
                      <td>{student_output}</td>
                      <td>
-                        {points_earned}
-                        /{points_total}
+                        {points_earned}/{points_total}
                      </td>
                   </tr>
                );
@@ -169,9 +189,18 @@ class GradesPage extends React.Component {
          }
 
       } */
-      return <div className="padded">{tables}
-         <textarea value={this.state.comment} id="" cols="30" rows="10"></textarea>
-      </div>;
+      return (
+         <div className="padded">
+            {tables}
+            <textarea
+               readOnly
+               value={this.state.comment}
+               id=""
+               cols="30"
+               rows="10"
+            ></textarea>
+         </div>
+      );
    }
 }
 
