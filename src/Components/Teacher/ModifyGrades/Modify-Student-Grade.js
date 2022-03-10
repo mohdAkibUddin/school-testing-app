@@ -58,11 +58,14 @@ const ModifyStudentGrades = () => {
    };
 
    const updateGrades = async () => {
+      delete full_payload[params.test_key];
+      console.log(params.test_key);
       full_payload[params.test_key] = data;
       full_payload.comment = comment;
       const pl = {
          "grades": full_payload
-      }
+      };
+      console.log(pl);
       const student_name = params.student_name;
       await axios.put(
          `https://w81a61.deta.dev/users/${student_name}`,
