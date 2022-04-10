@@ -14,6 +14,9 @@ class AnalyzeFunctions(ast.NodeVisitor):
     def __init__(self):
         self.name = ""
         self.funcs = {}
+        self.called = set()
+        self.forCond = False
+        self.whileCond = False
         self.valid = True
 
     def visit_FunctionDef(self, node):
@@ -22,9 +25,21 @@ class AnalyzeFunctions(ast.NodeVisitor):
         for argObj in node.args.args:
             self.funcs[node.name].append(argObj.arg)
         self.generic_visit(node)
+    
+    def visit_Call(self, node):
+        self.called.add(node.func.id)
+        self.generic_visit(node)
+    
+    def visit_For(self, node):
+        self.forCond=True
+        self.generic_visit(node)
+
+    def visit_While(self, node):
+        self.whileCond=True
+        self.generic_visit(node)
 
     def report(self):
-        print(self.funcs)
+        print(f"name  = {self.name}\nfunc  = {self.funcs}\ncalls = {self.called}\nisFor = {self.forCond}\nisWhi = {self.whileCond}")
 
 
 def gradeQuestion(rawSol, questionData):
@@ -75,7 +90,9 @@ def gradeQuestion(rawSol, questionData):
         return f"\"{word}\""
 
     questionGrade = {}
+    constraintsScore = {}
     functionName = {}
+
     functionName["function_name"] = questionData["questionData"]["function_name"]
     functionName["points"] = questionData["function_name_weight"]
 
@@ -86,7 +103,19 @@ def gradeQuestion(rawSol, questionData):
         functionName["student_function_name"] = "Parsing Error"
         functionName["points_earned"] = 0
 
+    constraintsScore["constraint"] = questionData["questionData"]["constraint"]
+    constraintsScore["points"] = questionData["constraint_weight"]
+
+    recurTruth = ana.name in ana.called
+    
+    if ana.valid:
+        constraintResults = {"for":ana.forCond, "while":ana.whileCond, "recursion":recurTruth, "":True}
+        constraintsScore["points_earned"] = constraintResults[constraintsScore["constraint"]]
+    else:
+        constraintsScore["points_earned"] = 0
+
     questionGrade["function_name"] = functionName
+    questionGrade["constraints_score"] = constraintsScore
     questionGrade["testcases"] = []
 
     for tc in questionData["questionData"]["testcases"]:
