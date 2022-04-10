@@ -110,7 +110,7 @@ def gradeQuestion(rawSol, questionData):
     
     if ana.valid:
         constraintResults = {"for":ana.forCond, "while":ana.whileCond, "recursion":recurTruth, "":True}
-        constraintsScore["points_earned"] = constraintResults[constraintsScore["constraint"]]
+        constraintsScore["points_earned"] = constraintsScore["points"] if constraintResults[constraintsScore["constraint"]] else 0
     else:
         constraintsScore["points_earned"] = 0
 
