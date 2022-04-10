@@ -67,6 +67,7 @@ def create_question():
             "testcases": request.json["questionData"]["testcases"],
             "difficulty": request.json["questionData"]["difficulty"],
             "categories": request.json["questionData"]["categories"],
+            "constraint": request.json["questionData"]["constraint"],
             "testcaseCount": len(request.json["questionData"]["testcases"])
         }
     })
@@ -97,7 +98,7 @@ def create_test():
     questions = []
     for key in keys:
         questions.append(question_database.get(key["questionKey"]) | {
-                         "testcase_weight": key["testcase_weight"], "function_name_weight": key["function_name_weight"]})
+                         "testcase_weight": key["testcase_weight"], "function_name_weight": key["function_name_weight"], "constraint_weight": key["constraint_weight"]})
 
     test = tests_database.put({
         "testName": request.json["testName"],
