@@ -16,7 +16,7 @@ const ModifyStudentGrades = () => {
 
    const [full_payload, setFullPayLoad] = useState({});
    const [data, setData] = useState({});
-   const [comment, setComment] = useState("");
+   const [comment, setComment] = useState([]);
    const [questions, setQuestions] = useState(new Map());
    const [student_responses, setStudentResponses] = useState({});
 
@@ -46,10 +46,13 @@ const ModifyStudentGrades = () => {
    };
 
    const handleComment = (event) => {
-      setComment(event.target.value);
+      const index = parseInt(event.target.name);
+      const comment_copy = comment.slice();
+      comment_copy[index] = event.target.value;
+      setComment(comment_copy);
    };
 
-  /*  const getGrades = async () => {
+   /*  const getGrades = async () => {
       const student_name = params.student_name;
       await axios
          .get(`https://w81a61.deta.dev/users/${student_name}`)
@@ -62,7 +65,6 @@ const ModifyStudentGrades = () => {
          });
    }; */
 
-
    const getGrades = async () => {
       const getQuestions = async () => {
          let questions_copy = new Map();
@@ -72,8 +74,9 @@ const ModifyStudentGrades = () => {
                for (let d of response.data[0]) {
                   questions_copy.set(d.key, d.questionData);
                }
-               setQuestions(questions_copy)
+               setQuestions(questions_copy);
             });
+
       };
 
       const student_name = params.student_name;
@@ -84,8 +87,8 @@ const ModifyStudentGrades = () => {
             getQuestions();
             setData(response.data.grades[params.test_key]);
             setFullPayLoad(response.data.grades);
-            setStudentResponses(response.data.tests[test_key])
-            setComment(response.data.grades[params.test_key].comment || "");
+            setStudentResponses(response.data.tests[test_key]);
+            setComment(response.data.grades[params.test_key].comment || []);
          });
    };
 
@@ -97,7 +100,6 @@ const ModifyStudentGrades = () => {
       };
       pl.grades[test_key] = data;
       pl.grades[test_key].comment = comment;
-      console.log(pl, student_name);
       await axios
          .put(`https://w81a61.deta.dev/users/${student_name}`, pl, {
             headers: {
@@ -115,9 +117,13 @@ const ModifyStudentGrades = () => {
    let total_points = 0;
    let points_counter = 0;
 
+
    let tables = [];
+   let index = -1;
    for (let question_key in data) {
       if (question_key != "comment") {
+         console.log(data[question_key]);
+         index++;
          const question_data = data[question_key];
          const expected_function_name =
             question_data.function_name.function_name;
@@ -131,7 +137,7 @@ const ModifyStudentGrades = () => {
          let tablerows = [];
          const function_name_row = (
             <tr key={[question_key, expected_function_name]}>
-               <td>{expected_function_name}</td>
+               <td><strong>name:</strong> {expected_function_name}</td>
                <td>{student_function_name}</td>
                <td>
                   <input
@@ -140,13 +146,20 @@ const ModifyStudentGrades = () => {
                      value={points_earned}
                      onChange={handleChangeFunctionName}
                   />
-                  /{points_total}
+               </td>
+               <td>
+                  {points_earned}
+               </td>
+               <td>
+                  {points_total}
                </td>
             </tr>
          );
          tablerows.push(function_name_row);
-         const question_text = questions.has(question_key) ? questions.get(question_key).question : "";
-         
+         const question_text = questions.has(question_key)
+            ? questions.get(question_key).question
+            : "";
+
          let table = (
             <div key={question_key}>
                <br />
@@ -158,11 +171,21 @@ const ModifyStudentGrades = () => {
                      <tr>
                         <th>EXPECTED</th>
                         <th>RUN</th>
-                        <th>POINTS</th>
+                        <th>MODIFY</th>
+                        <th>AUTOGRADED</th>
+                        <th>MAX</th>
                      </tr>
                   </thead>
                   <tbody>{tablerows}</tbody>
                </table>
+               <h4>Add Comment</h4>
+               <textarea
+                  name={index}
+                  cols="30"
+                  rows="10"
+                  value={comment[index]}
+                  onChange={handleComment}
+               ></textarea>
                <br />
             </div>
          );
@@ -193,7 +216,12 @@ const ModifyStudentGrades = () => {
                         value={points_earned}
                         onChange={handleChange}
                      />
-                     /{points_total}
+                  </td>
+                  <td>
+                     {points_earned}
+                  </td>
+                  <td>
+                     {points_total}
                   </td>
                </tr>
             );
@@ -208,14 +236,6 @@ const ModifyStudentGrades = () => {
          <h2>
             {points_counter}/{total_points}
          </h2>
-         <h4>Add Comment</h4>
-         <textarea
-            name="Comment"
-            cols="30"
-            rows="10"
-            value={comment}
-            onChange={handleComment}
-         ></textarea>
          <input type="button" value="Update" onClick={updateGrades} />
       </div>
    );

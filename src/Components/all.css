@@ -73,6 +73,10 @@ body{
     padding: 50px;
 }
 
+.answered {
+    background: lightgreen;
+}
+
 table, th, td {
     border: 1px solid;
 }

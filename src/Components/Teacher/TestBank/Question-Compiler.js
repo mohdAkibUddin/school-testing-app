@@ -42,10 +42,12 @@ class QuestionCompiler extends React.Component {
             questionKeys: []
          };
          for (let [key, points_array] of this.state.questions) {
+            console.log(points_array, "bing")
             payload.questionKeys.push({
                questionKey: key,
                testcase_weight: points_array[0],
-               function_name_weight: points_array[1]
+               function_name_weight: points_array[1],
+               constraint_weight: points_array[2]
             });
          }
          this.postData(payload);
@@ -57,19 +59,39 @@ class QuestionCompiler extends React.Component {
       let point_values = [];
       const testcase_count = event.target.name.split(",")[1];
       const key = event.target.name.split(",")[2];
-      point_values.push(
-         (0.8 * parseFloat(event.target.value)) / parseFloat(testcase_count)
-      );
-      point_values.push(0.2 * parseFloat(event.target.value));
-      questions.set(key, point_values);
+      const constraint = event.target.name.split(",")[3];
 
-      if (event.target.value === "" || parseFloat(event.target.value) === 0) {
-         questions.delete(key);
+      if (constraint !== "") {
+         point_values.push(
+            (0.6 * parseFloat(event.target.value)) / parseFloat(testcase_count)
+         );
+         point_values.push(0.2 * parseFloat(event.target.value));
+         point_values.push(0.2 * parseFloat(event.target.value));
+         questions.set(key, point_values);
+   
+         if (event.target.value === "" || parseFloat(event.target.value) === 0) {
+            questions.delete(key);
+         }
+         console.log(questions, "aa")
+         this.setState({
+            questions: questions,
+         });
+      } else {
+         point_values.push(
+            (0.8 * parseFloat(event.target.value)) / parseFloat(testcase_count)
+         );
+         point_values.push(0.2 * parseFloat(event.target.value));
+         questions.set(key, point_values);
+         point_values.push(0);
+
+         if (event.target.value === "" || parseFloat(event.target.value) === 0) {
+            questions.delete(key);
+         }
+
+         this.setState({
+            questions: questions,
+         });
       }
-
-      this.setState({
-         questions: questions,
-      });
    };
 
    handleTestName = (event) => {
@@ -103,6 +125,16 @@ class QuestionCompiler extends React.Component {
                );
             });
 
+            let constraints = (
+               <h4>No Constraints</h4>
+            );
+            if (question.questionData.constraint !== "") {
+               console.log(question.questionData);
+               constraints = (
+                  <h4>Constraint: {question.questionData.constraint}</h4>
+               )
+            }
+
             questionsToRender.push(
                <div key={question.key} className="question-compiler-element">
                   <div className="line">
@@ -118,6 +150,7 @@ class QuestionCompiler extends React.Component {
                      {question.questionData.types_input.join(", ")})→
                      {question.questionData.types_output.join(", ")};
                   </p>
+                  {constraints}
                   <div className="line">
                      <p>Points: </p>
                      <input
@@ -127,6 +160,7 @@ class QuestionCompiler extends React.Component {
                            "total",
                            question.questionData.testcaseCount,
                            question.key,
+                           question.questionData.constraint
                         ]}
                         onChange={this.handleChange}
                      />

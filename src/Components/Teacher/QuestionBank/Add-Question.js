@@ -13,16 +13,21 @@ class AddQuestion extends React.Component {
          function_name: props.function_name || "",
          types_input: props.types_input || [""],
          types_output: props.types_output || [""],
-         testcases: props.testcases || [{ input: "", output: "" }],
-         testcaseCount: props.testcaseCount || 1,
+         testcases: props.testcases || [{ input: "", output: "" }, { input: "", output: "" }],
+         testcaseCount: props.testcaseCount || 2,
          difficulty: props.difficulty || "",
-         categories: props.categories || [""],
+         categories: props.categories || [],
+         constraint: props.constraint || "",
+
+         checkbox_disabled: {
+            difficulty: null,
+            constraint: null,
+         }
       };
 
       this.handleChange = this.handleChange.bind(this);
       this.handleChangeTestCase = this.handleChangeTestCase.bind(this);
       this.handleChangeTypes = this.handleChangeTypes.bind(this);
-      this.handleChangeCategories = this.handleChangeCategories.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.addBox = this.addBox.bind(this);
    }
@@ -40,10 +45,13 @@ class AddQuestion extends React.Component {
    handleSubmit = (event) => {
       event.preventDefault();
       let data = clone(this.state);
+
+      delete data.checkbox_disabled;
       delete data.questions;
       data = {
          "questionData" : data
       }
+      console.log(data.questionData);
       this.postData(data);
       this.setState({
          questions: [],
@@ -52,10 +60,16 @@ class AddQuestion extends React.Component {
          function_name: "",
          types_input: [""],
          types_output: [""],
-         testcases: [{ input: "", output: "" }],
-         testcaseCount: 1,
+         testcases: [{ input: "", output: "" }, { input: "", output: "" }],
+         testcaseCount: 2,
          difficulty: "",
-         categories: [""],
+         categories: [],
+         constraint: "",
+
+         checkbox_disabled: {
+            difficulty: null,
+            constraint: null,
+         }
       });
    }
 
@@ -66,13 +80,6 @@ class AddQuestion extends React.Component {
    };
 
    handleChangeTypes = (event) => {
-      const arr = event.target.value.split(" ");
-      this.setState({
-         [event.target.name]: arr,
-      });
-   }
-
-   handleChangeCategories = (event) => {
       const arr = event.target.value.split(" ");
       this.setState({
          [event.target.name]: arr,
@@ -100,6 +107,34 @@ class AddQuestion extends React.Component {
       });
    }
 
+   handleCheckbox = event => {
+      if (event.target.value === "constraint" || event.target.value === "difficulty") {
+         let checkbox_disabled = clone(this.state.checkbox_disabled);
+         if (checkbox_disabled[event.target.value] === event.target.name) {
+            checkbox_disabled[event.target.value] = null;
+         } else {
+            checkbox_disabled[event.target.value] = event.target.name;
+         }
+         this.setState({
+            checkbox_disabled: checkbox_disabled,
+            [event.target.value]: checkbox_disabled[event.target.value]
+         });
+      } else {
+         let categories = new Set(this.state.categories);
+         if (categories.has(event.target.name)) {
+            categories.delete(event.target.name);
+         } else {
+            categories.add(event.target.name);
+         }
+         categories = Array.from(categories);
+         console.log(categories);
+
+         this.setState({
+            categories: categories
+         });
+      }      
+   }
+
    render() {
       let testcaseBoxes = [];
       this.state.testcases.forEach((testcase, i) => {
@@ -119,6 +154,68 @@ class AddQuestion extends React.Component {
                   placeholder="output"
                   onChange={this.handleChangeTestCase}
                />
+            </div>
+         );
+      });
+
+      let difficulties = ["easy", "medium", "hard"];
+      let difficultyCheckBoxes = [];
+      difficulties.forEach((difficulty) => {
+         difficultyCheckBoxes.push(
+            <div key={"difficulty" + difficulty}>
+               <label htmlFor={difficulty}>
+                  <input
+                     checked={this.state.difficulty === difficulty}
+                     type="checkbox"
+                     name={difficulty}
+                     id={"difficulty" + difficulty}
+                     value="difficulty"
+                     onChange={this.handleCheckbox}
+                     disabled={this.state.checkbox_disabled["difficulty"] !== null && this.state.checkbox_disabled["difficulty"] !== difficulty}
+                  />
+                  {difficulty}
+               </label>
+            </div>
+         );
+      });
+
+      let categories = ["iteration", "arithmetic", "string", "recursion", "maps", "conditionals"];
+      let categoryCheckboxes = [];
+      categories.forEach((category) => {
+         categoryCheckboxes.push(
+            <div key={"category" + category}>
+               <label htmlFor={category}>
+                  <input
+                     checked={this.state.categories.includes(category)}
+                     type="checkbox"
+                     name={category}
+                     id={"category" + category}
+                     value="category"
+                     onChange={this.handleCheckbox}
+                  />
+                  {category}
+               </label>
+            </div>
+         );
+      });
+
+      let constraints = ["for", "while", "hard"];
+      let constraintCheckBoxes = [];
+      constraints.forEach((constraint) => {
+         constraintCheckBoxes.push(
+            <div key={"constraint" + constraint}>
+               <label htmlFor={constraint}>
+                  <input
+                     checked={this.state.constraint === constraint}
+                     type="checkbox"
+                     name={constraint}
+                     id={"constraint" + constraint}
+                     value="constraint"
+                     onChange={this.handleCheckbox}
+                     disabled={this.state.checkbox_disabled["constraint"] !== null && this.state.checkbox_disabled["constraint"] !== constraint}
+                  />
+                  {constraint}
+               </label>
             </div>
          );
       });
@@ -162,24 +259,14 @@ class AddQuestion extends React.Component {
                   />
                   <p>Testcase(s) Space Seperated</p>
                   {testcaseBoxes}
-                  <input type="button" value="Add Case" onClick={this.addBox} />
+                  <input type="button" value="Add Case" onClick={this.addBox} hidden={this.state.testcaseCount === 5}/>
                   <br />
                   <p>Difficulty</p>
-                  <input
-                     type="text"
-                     name="difficulty"
-                     value={this.state.difficulty}
-                     placeholder="medium"
-                     onChange={this.handleChange}
-                  />
-                  <p>Categories Space Seperated</p>
-                  <input
-                     type="text"
-                     name="categories"
-                     value={this.state.categories.join(" ")}
-                     placeholder="recursion, memoization"
-                     onChange={this.handleChangeCategories}
-                  />
+                  {difficultyCheckBoxes}
+                  <p>Categories</p>
+                  {categoryCheckboxes}
+                  <p>Constraint</p>
+                  {constraintCheckBoxes}
                </label>
                <br />
                <br />

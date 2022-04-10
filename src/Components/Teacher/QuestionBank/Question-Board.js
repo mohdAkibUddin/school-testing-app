@@ -9,20 +9,34 @@ class QuestionBoard extends React.Component {
       this.state = {
          searchString: "",
          displayedCheckBoxes: {
-            categories: props.displayedCategoryBoxes,
+            categories: new Map([
+               ["iteration", false],
+               ["arithmetic", false],
+               ["strings", false],
+               ["recursion", false],
+               ["maps", false],
+               ["conditionals", false]
+            ]),
             difficulties: new Map([
                ["easy", false],
                ["medium", false],
                ["hard", false],
             ]),
+            constraints: new Map([
+               ["for", false],
+               ["while", false],
+               ["recursion", false],
+            ]),
          },
          checkedCheckBoxes: {
             categories: new Set(),
             difficulties: new Set(),
+            constraints: new Set()
          },
          filteringActive: {
             categories: false,
             difficulties: false,
+            constraints: false
          },
          match_all_categories: true,
          questions: props.questions,
@@ -34,15 +48,6 @@ class QuestionBoard extends React.Component {
    }
 
    componentDidUpdate = (prevProps) => {
-      if (
-         prevProps.displayedCategoryBoxes !== this.props.displayedCategoryBoxes
-      ) {
-         let displayedCheckBoxes = clone(this.state.displayedCheckBoxes);
-         displayedCheckBoxes.categories = this.props.displayedCategoryBoxes;
-         this.setState({
-            displayedCheckBoxes: displayedCheckBoxes,
-         });
-      }
       if (prevProps.questions !== this.props.questions) {
          this.setState({
             questions: this.props.questions,
@@ -55,7 +60,7 @@ class QuestionBoard extends React.Component {
    }
 
    renderQuestionCard = (value) => {
-      if (String(value.questionData.function_name).toLowerCase().includes(this.state.searchString.toLowerCase())) {
+      if (String(value.questionData.question).toLowerCase().includes(this.state.searchString.toLowerCase())) {
          return (
             <QuestionCard
                question_key={value.key}
@@ -126,7 +131,7 @@ class QuestionBoard extends React.Component {
                   <input
                      type="checkbox"
                      name={category}
-                     id={category}
+                     id={"categorybank" + category}
                      value="categories"
                      onChange={this.handleCheckbox}
                   />
@@ -145,11 +150,30 @@ class QuestionBoard extends React.Component {
                   <input
                      type="checkbox"
                      name={difficulty}
-                     id={difficulty}
+                     id={"difficultybank" + difficulty}
                      value="difficulties"
                      onChange={this.handleCheckbox}
                   />
                   {difficulty}
+               </label>
+            </div>
+         );
+      });
+
+      let constraints = ["for", "while", "recursion"];
+      let constraintCheckBoxes = [];
+      constraints.forEach((constraint) => {
+         constraintCheckBoxes.push(
+            <div key={constraint}>
+               <label htmlFor={constraint}>
+                  <input
+                     type="checkbox"
+                     name={constraint}
+                     id={"constraintbank" + constraint}
+                     value="constraints"
+                     onChange={this.handleCheckbox}
+                  />
+                  {constraint}
                </label>
             </div>
          );
@@ -161,6 +185,13 @@ class QuestionBoard extends React.Component {
          questionsToRender = questionsToRender.filter((question) => {
             return this.state.checkedCheckBoxes.difficulties.has(
                question.questionData.difficulty
+            );
+         });
+      }
+      if (this.state.filteringActive.constraints) {
+         questionsToRender = questionsToRender.filter((question) => {
+            return this.state.checkedCheckBoxes.constraints.has(
+               question.questionData.constraint
             );
          });
       }
@@ -212,7 +243,7 @@ class QuestionBoard extends React.Component {
             <input
                type="text"
                name="searchString"
-               placeholder="search function name"
+               placeholder="search question"
                value={this.state.searchString}
                onChange={this.handleSearch}
             />
@@ -238,6 +269,11 @@ class QuestionBoard extends React.Component {
                   <br />
                   <p>Select Difficulty</p>
                   {difficultyCheckBoxes}
+               </div>
+               <div>
+                  <br />
+                  <p>Select Constraint</p>
+                  {constraintCheckBoxes}
                </div>
             </div>
             <div className="scrollable-container">{questionCards}</div>
