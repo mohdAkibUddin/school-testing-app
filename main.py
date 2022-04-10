@@ -67,6 +67,7 @@ def create_question():
             "testcases": request.json["questionData"]["testcases"],
             "difficulty": request.json["questionData"]["difficulty"],
             "categories": request.json["questionData"]["categories"],
+            "constraint": request.json["questionData"]["constraint"],
             "testcaseCount": len(request.json["questionData"]["testcases"])
         }
     })
