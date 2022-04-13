@@ -37,9 +37,18 @@ const ModifyStudentGrades = () => {
    const handleChangeFunctionName = (event) => {
       let data_clone = clone(data);
       const question_key = event.target.name.split(",")[0];
-      const function_name = event.target.name.split(",")[1];
 
       data_clone[question_key].function_name.points_earned = parseFloat(
+         event.target.value
+      );
+      setData(data_clone);
+   };
+
+   const handleChangeConstraint = (event) => {
+      let data_clone = clone(data);
+      const question_key = event.target.name.split(",")[0];
+
+      data_clone[question_key].constrains_score.points_earned = parseFloat(
          event.target.value
       );
       setData(data_clone);
@@ -122,7 +131,6 @@ const ModifyStudentGrades = () => {
    let index = -1;
    for (let question_key in data) {
       if (question_key != "comment") {
-         console.log(data[question_key]);
          index++;
          const question_data = data[question_key];
          const expected_function_name =
@@ -133,6 +141,8 @@ const ModifyStudentGrades = () => {
          const points_total = question_data.function_name.points;
          total_points += parseFloat(points_total);
          points_counter += parseFloat(points_earned);
+
+         console.log(question_data)
 
          let tablerows = [];
          const function_name_row = (
@@ -155,6 +165,34 @@ const ModifyStudentGrades = () => {
                </td>
             </tr>
          );
+
+         if (question_data.constraints_score.constraint) {
+            const constraint = question_data.constraints_score.constraint;
+            const points_earned = question_data.constraints_score.points_earned;
+            const points_total = question_data.constraints_score.points;
+            const constraint_row = (
+               <tr key={[question_key, constraint]}>
+                  <td><strong>constraint:</strong> {constraint}</td>
+                  <td>{points_earned != 0 ? 'PASS' : 'FAIL'}</td>
+                  <td>
+                     <input
+                        name={[question_key, constraint]}
+                        type="number"
+                        value={points_earned}
+                        onChange={handleChangeFunctionName}
+                     />
+                  </td>
+                  <td>
+                     {points_earned}
+                  </td>
+                  <td>
+                     {points_total}
+                  </td>
+               </tr>
+            );
+            tablerows.push(constraint_row)
+         }
+
          tablerows.push(function_name_row);
          const question_text = questions.has(question_key)
             ? questions.get(question_key).question

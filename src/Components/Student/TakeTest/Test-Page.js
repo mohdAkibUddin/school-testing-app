@@ -103,7 +103,7 @@ class TestPage extends React.Component {
 
 	handleLegendClick = (event) => {
 		this.setState({
-			display_index: parseInt(event.target.value.split(" ")[1])
+			display_index: parseInt(event.target.value.split(" ")[1]) - 1
 		});
 	}
 
@@ -157,17 +157,15 @@ class TestPage extends React.Component {
 						{question.function_name}({question.types_input.join(", ")})→
 						{question.types_output.join(", ")};
 					</p>
-					<div className="line">
-						<h3>Points: {points}</h3>
-						<br />
-						<textarea
-							name={key}
-							cols="90"
-							rows="15"
-							value={this.state.student_response[key]}
-							onChange={this.handleChange}
-						/>
-					</div>
+					<h3>Points: {points}</h3>
+					<h3>Constraint: {question.constraint}</h3>
+					<textarea
+						name={key}
+						cols="90"
+						rows="15"
+						value={this.state.student_response[key]}
+						onChange={this.handleChange}
+					/>
 				</div>
 			);
 		});

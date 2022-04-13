@@ -199,7 +199,7 @@ class AddQuestion extends React.Component {
          );
       });
 
-      let constraints = ["for", "while", "hard"];
+      let constraints = ["for", "while", "recursion"];
       let constraintCheckBoxes = [];
       constraints.forEach((constraint) => {
          constraintCheckBoxes.push(

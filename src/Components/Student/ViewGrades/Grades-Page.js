@@ -70,13 +70,33 @@ class GradesPage extends React.Component {
             let tablerows = [];
             const function_name_row = (
                <tr key={[question_key, expected_function_name]}>
-                  <td>{expected_function_name}</td>
+                  <td><strong>name:</strong> {expected_function_name}</td>
                   <td>{student_function_name}</td>
                   <td>{points_earned}</td>
                   <td>{points_total}</td>
                </tr>
             );
             tablerows.push(function_name_row);
+
+            if (question_data.constraints_score.constraint) {
+               const constraint = question_data.constraints_score.constraint;
+               const points_earned = question_data.constraints_score.points_earned;
+               const points_total = question_data.constraints_score.points;
+               const constraint_row = (
+                  <tr key={[question_key, constraint]}>
+                     <td><strong>constraint:</strong> {constraint}</td>
+                     <td>{points_earned != 0 ? 'PASS' : 'FAIL'}</td>
+                     <td>
+                        {points_earned}
+                     </td>
+                     <td>
+                        {points_total}
+                     </td>
+                  </tr>
+               );
+               tablerows.push(constraint_row)
+            }
+
             const question_text = this.state.questions.has(question_key)
                ? this.state.questions.get(question_key).question
                : "";

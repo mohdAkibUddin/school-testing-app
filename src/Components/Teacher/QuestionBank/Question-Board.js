@@ -12,7 +12,7 @@ class QuestionBoard extends React.Component {
             categories: new Map([
                ["iteration", false],
                ["arithmetic", false],
-               ["strings", false],
+               ["string", false],
                ["recursion", false],
                ["maps", false],
                ["conditionals", false]
