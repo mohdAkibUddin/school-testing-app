@@ -6,7 +6,7 @@ def digit_check(ch):
     return ch.isdigit()
 
 def alphnum(ch):
-    return ch.isalnum() or ch == "-"
+    return ch.isalnum() or ch in {"-", "+", "*", "/"}
 
 def parseArgs(rawStr, typeCheck):
     dest = []

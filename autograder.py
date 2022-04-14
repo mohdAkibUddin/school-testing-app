@@ -56,7 +56,7 @@ def gradeQuestion(rawSol, questionData):
         ana = AnalyzeFunctions()
         ana.visit(tree)
 
-    runner = []  # builder for command that will be run
+    runner = []  # builder for command that will be ran
     argPosType = []  # positions and type of where test case values must be placed in runner
 
     runner.extend([solution, "\n"])
@@ -86,9 +86,6 @@ def gradeQuestion(rawSol, questionData):
 
     runner.append("), end=\"\")\n")
 
-    def applyQuotes(word):
-        return f"\"{word}\""
-
     questionGrade = {}
     constraintsScore = {}
     functionName = {}
@@ -117,6 +114,9 @@ def gradeQuestion(rawSol, questionData):
     questionGrade["function_name"] = functionName
     questionGrade["constraints_score"] = constraintsScore
     questionGrade["testcases"] = []
+
+    def applyQuotes(word):
+        return f"\"{word}\""
 
     for tc in questionData["questionData"]["testcases"]:
         tcBreakdown = {}
