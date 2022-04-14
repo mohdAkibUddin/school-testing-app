@@ -82,6 +82,8 @@ class GradesPage extends React.Component {
                const constraint = question_data.constraints_score.constraint;
                const points_earned = question_data.constraints_score.points_earned;
                const points_total = question_data.constraints_score.points;
+               total_points += parseFloat(points_total);
+               points_counter += parseFloat(points_earned);
                const constraint_row = (
                   <tr key={[question_key, constraint]}>
                      <td><strong>constraint:</strong> {constraint}</td>

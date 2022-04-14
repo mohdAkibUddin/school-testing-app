@@ -25,9 +25,7 @@ class TestPage extends React.Component {
 				let questions = [];
 				let student_response = {};
 				test_data.forEach((data) => {
-					const points =
-						data.function_name_weight +
-						data.questionData.testcaseCount * data.testcase_weight;
+					const points = data.constraint_weight + data.function_name_weight + data.questionData.testcaseCount * data.testcase_weight;
 					questions.push({
 						question_data: data.questionData,
 						question_key: data.key,
@@ -158,7 +156,7 @@ class TestPage extends React.Component {
 						{question.types_output.join(", ")};
 					</p>
 					<h3>Points: {points}</h3>
-					<h3>Constraint: {question.constraint}</h3>
+					<h3>Constraint: {question.constraint == "" ? "NONE" : question.constraint}</h3>
 					<textarea
 						name={key}
 						cols="90"
