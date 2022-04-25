@@ -1,25 +1,9 @@
 import React, { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import UserContext from "../Context/user/userContext";
 
 const Navbar = () => {
-  let navigate = useNavigate();
   const { isAuthenticated, role, logoutUser } = useContext(UserContext);
-
-  const questionPage = () => {
-    navigate("/question-bank");
-  };
-  const testPage = () => {
-    navigate("/test-creation");
-  };
-
-  const chooseTestPage = () => {
-    navigate("/view-tests");
-  };
-
-  const gradeTestpage = () => {
-    navigate("/grade-tests");
-  };
 
   return (
     <>
@@ -33,18 +17,47 @@ const Navbar = () => {
                 <h1>Welcome Teacher</h1>
               </div>
               <div id="second">
-                <button onClick={questionPage} type="submit">
+                <NavLink
+                  exact
+                  style={({ isActive }) => ({
+                    color: isActive ? "#fff" : "#002D62",
+                  })}
+                  to="/question-bank"
+                  type="submit"
+                >
                   Question Bank
-                </button>
-                <button onClick={testPage} type="submit">
+                </NavLink>
+                <NavLink
+                  exact
+                  style={({ isActive }) => ({
+                    color: isActive ? "#fff" : "#002D62",
+                  })}
+                  to="/test-creation"
+                  type="submit"
+                >
                   Create Test
-                </button>
-                <button onClick={gradeTestpage} type="submit">
+                </NavLink>
+                <NavLink
+                  exact
+                  style={({ isActive }) => ({
+                    color: isActive ? "#fff" : "#002D62",
+                  })}
+                  to="/grade-tests"
+                  type="submit"
+                >
                   Grade Tests
-                </button>
-                <button type="submit" onClick={logoutUser}>
+                </NavLink>
+                <NavLink
+                  exact
+                  style={({ isActive }) => ({
+                    color: isActive ? "#fff" : "#002D62",
+                  })}
+                  to="/"
+                  type="submit"
+                  onClick={logoutUser}
+                >
                   Log Out
-                </button>
+                </NavLink>
               </div>
             </>
           ) : (
@@ -53,12 +66,27 @@ const Navbar = () => {
                 <h1>Welcome Student</h1>
               </div>
               <div id="second">
-                <button onClick={chooseTestPage} type="submit">
+                <NavLink
+                  exact
+                  style={({ isActive }) => ({
+                    color: isActive ? "#fff" : "#002D62",
+                  })}
+                  to="/view-tests"
+                  type="submit"
+                >
                   Choose Test
-                </button>
-                <button type="submit" onClick={logoutUser}>
+                </NavLink>
+                <NavLink
+                  exact
+                  style={({ isActive }) => ({
+                    color: isActive ? "#fff" : "#002D62",
+                  })}
+                  to="/"
+                  type="submit"
+                  onClick={logoutUser}
+                >
                   Log Out
-                </button>
+                </NavLink>
               </div>
             </>
           )}

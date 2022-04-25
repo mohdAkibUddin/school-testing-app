@@ -27,15 +27,15 @@ const Login = ({ history }) => {
     <div className="form">
       <form onSubmit={handleSubmit}>
         <div className="input-container">
-          <label>Username </label>
+          <label>Username: </label>
           <input onChange={onChange} type="text" name="username" required />
         </div>
         <div className="input-container">
-          <label>Password </label>
+          <label>Password: </label>
           <input onChange={onChange} type="password" name="password" required />
         </div>
         <div className="button-container">
-          <input type="submit" />
+          <input className="buttonLogin" type="submit" />
         </div>
       </form>
     </div>
@@ -43,6 +43,7 @@ const Login = ({ history }) => {
   return (
     <div className="app">
       <div className="login-form">
+        <img className="loginImage" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1200px-Python-logo-notext.svg.png"/>
         <div className="title">Sign In</div>
         {renderForm}
         {isAuthenticated ? (
