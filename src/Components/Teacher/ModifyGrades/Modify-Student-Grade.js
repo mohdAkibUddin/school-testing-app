@@ -19,6 +19,7 @@ const ModifyStudentGrades = () => {
   const [comment, setComment] = useState([]);
   const [questions, setQuestions] = useState(new Map());
   const [student_responses, setStudentResponses] = useState({});
+  const [initData, setInitData] = useState({});
 
   useEffect(() => {
     getGrades();
@@ -91,6 +92,7 @@ const ModifyStudentGrades = () => {
       .get(`https://w81a61.deta.dev/users/${student_name}`)
       .then((response) => {
         getQuestions();
+        setInitData(response.data.grades[params.test_key]);
         setData(response.data.grades[params.test_key]);
         setFullPayLoad(response.data.grades);
         setStudentResponses(response.data.tests[test_key]);
@@ -123,12 +125,15 @@ const ModifyStudentGrades = () => {
   let total_points = 0;
   let points_counter = 0;
 
+  for (let q in initData);
+
   let tables = [];
   let index = -1;
   for (let question_key in data) {
     if (question_key != "comment") {
       index++;
       const question_data = data[question_key];
+      const init_data = initData[question_key];
       const expected_function_name = question_data.function_name.function_name;
       const student_function_name =
         question_data.function_name.student_function_name;
@@ -137,7 +142,11 @@ const ModifyStudentGrades = () => {
       total_points += parseFloat(points_total);
       points_counter += parseFloat(points_earned);
 
-      console.log(question_data);
+      if (undefined == init_data){
+         console.log(question_data, "q");
+         console.log(init_data, "i")
+         console.log(initData, question_key)
+      }
 
       let tablerows = [];
       const function_name_row = (
@@ -160,10 +169,10 @@ const ModifyStudentGrades = () => {
             />
           </td>
           <td className="center">
-            {points_earned % 1 === 0 ? points_earned : points_earned.toFixed(3)}
+          {Math.round((points_earned + Number.EPSILON) * 100) / 100}
           </td>
           <td className="center">
-            {points_total % 1 === 0 ? points_total : points_total.toFixed(3)}
+          {Math.round((points_total + Number.EPSILON) * 100) / 100}
           </td>
         </tr>
       );
@@ -185,11 +194,7 @@ const ModifyStudentGrades = () => {
                 className="padding modifyScore"
                 name={[question_key, constraint]}
                 type="number"
-                value={
-                  points_earned % 1 === 0
-                    ? points_earned
-                    : points_earned.toFixed(3)
-                }
+                value={Math.round((points_earned + Number.EPSILON) * 100) / 100}
                 onChange={handleChangeFunctionName}
               />
             </td>
@@ -199,7 +204,7 @@ const ModifyStudentGrades = () => {
                 : points_earned.toFixed(3)}
             </td>
             <td className="center">
-              {points_total % 1 === 0 ? points_total : points_total.toFixed(3)}
+            {Math.round((points_total + Number.EPSILON) * 100) / 100}
             </td>
           </tr>
         );
@@ -249,6 +254,7 @@ const ModifyStudentGrades = () => {
       tables.push(table);
 
       const testcases = question_data.testcases;
+
       for (let i in testcases) {
         const testcase = testcases[i];
         const expected_output = testcase.expected_output;
@@ -258,6 +264,8 @@ const ModifyStudentGrades = () => {
         const points_earned = testcase.points_earned;
         total_points += parseFloat(points_total);
         points_counter += parseFloat(points_earned);
+
+        const auto_score = init_data.testcases[i].points_earned;
 
         const testcase_row = (
           <tr key={[question_key, i]}>
@@ -271,21 +279,15 @@ const ModifyStudentGrades = () => {
                 name={[question_key, i]}
                 className="padding modifyScore"
                 type="number"
-                value={
-                  points_earned % 1 === 0
-                    ? points_earned
-                    : points_earned.toFixed(3)
-                }
+                value={Math.round((points_earned + Number.EPSILON) * 100) / 100}
                 onChange={handleChange}
               />
             </td>
             <td className="center ">
-              {points_earned % 1 === 0
-                ? points_earned
-                : points_earned.toFixed(3)}
+              {Math.round((auto_score + Number.EPSILON) * 100) / 100}
             </td>
             <td className="center">
-              {points_total % 1 === 0 ? points_total : points_total.toFixed(3)}
+               {Math.round((points_total + Number.EPSILON) * 100) / 100}
             </td>
           </tr>
         );
@@ -298,7 +300,7 @@ const ModifyStudentGrades = () => {
     <div className="column">
       {tables}
       <h2>
-        Total Score: {points_counter.toFixed(3)}/{total_points.toFixed(2)}
+        Total Score: {Math.round((points_counter + Number.EPSILON) * 100) / 100}/{total_points}
       </h2>
       <input
         className="gradeTestsButton margin"

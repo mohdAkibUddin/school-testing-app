@@ -205,10 +205,7 @@ class QuestionBoard extends React.Component {
         questionsToRender = questionsToRender.filter((question) => {
           let canAdd = true;
           this.state.checkedCheckBoxes.categories.forEach((checkedCategory) => {
-            if (
-              !question.questionData.categories.includes(checkedCategory) &&
-              !this.state.filteringActive.difficulties
-            ) {
+            if (!question.questionData.categories.includes(checkedCategory)) {
               canAdd = false;
             }
           });
