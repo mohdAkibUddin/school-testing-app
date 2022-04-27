@@ -34,8 +34,8 @@ class SelectStudent extends React.Component {
     console.log(test_key);
     this.state.students.forEach((student) => {
       student_buttons.push(
-        <div key={student}>
-          <br />
+        <div className="tests" key={student}>
+          <h2> Student Name: </h2>
           <Link
             to={{
               pathname: "/modify-student-grades",
@@ -44,12 +44,16 @@ class SelectStudent extends React.Component {
           >
             <input className="gradeTestsButton" type="button" value={student} />
           </Link>
-          <br />
         </div>
       );
     });
     console.log(this.state.students, this.props.test_key);
-    return <div className="padded">{student_buttons}</div>;
+    return (
+      <div className="padding column">
+        <h1>Students</h1>
+        <div className="students">{student_buttons}</div>
+      </div>
+    );
   }
 }
 

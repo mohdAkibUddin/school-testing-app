@@ -91,7 +91,8 @@ class ViewTests extends React.Component {
 
     for (let [test_key, takeable] of this.state.ungraded_tests) {
       let element = (
-        <>
+        <div className="tests">
+          <h3>Test Name:</h3>
           <Link
             to={{
               pathname: "/take-test",
@@ -108,7 +109,7 @@ class ViewTests extends React.Component {
           </Link>
           <br />
           <br />
-        </>
+        </div>
       );
       takeable
         ? takeable_tests.push(element)

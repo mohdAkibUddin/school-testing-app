@@ -142,20 +142,29 @@ const ModifyStudentGrades = () => {
       let tablerows = [];
       const function_name_row = (
         <tr key={[question_key, expected_function_name]}>
-          <td>
+          <td className="questionTablecolumn center">
             <strong>name:</strong> {expected_function_name}
           </td>
-          <td>{student_function_name}</td>
-          <td>
+          <td className="center">{student_function_name}</td>
+          <td className="center">
             <input
               name={[question_key, expected_function_name]}
               type="number"
-              value={points_earned}
+              className="padding modifyScore"
+              value={
+                points_earned % 1 === 0
+                  ? points_earned
+                  : points_earned.toFixed(3)
+              }
               onChange={handleChangeFunctionName}
             />
           </td>
-          <td>{points_earned}</td>
-          <td>{points_total}</td>
+          <td className="center">
+            {points_earned % 1 === 0 ? points_earned : points_earned.toFixed(3)}
+          </td>
+          <td className="center">
+            {points_total % 1 === 0 ? points_total : points_total.toFixed(3)}
+          </td>
         </tr>
       );
 
@@ -167,20 +176,31 @@ const ModifyStudentGrades = () => {
         points_counter += parseFloat(points_earned);
         const constraint_row = (
           <tr key={[question_key, constraint]}>
-            <td>
+            <td className="questionTablecolumn center">
               <strong>constraint:</strong> {constraint}
             </td>
-            <td>{points_earned != 0 ? "PASS" : "FAIL"}</td>
-            <td>
+            <td className="center">{points_earned != 0 ? "PASS" : "FAIL"}</td>
+            <td className="center">
               <input
+                className="padding modifyScore"
                 name={[question_key, constraint]}
                 type="number"
-                value={points_earned}
+                value={
+                  points_earned % 1 === 0
+                    ? points_earned
+                    : points_earned.toFixed(3)
+                }
                 onChange={handleChangeFunctionName}
               />
             </td>
-            <td>{points_earned}</td>
-            <td>{points_total}</td>
+            <td className="center">
+              {points_earned % 1 === 0
+                ? points_earned
+                : points_earned.toFixed(3)}
+            </td>
+            <td className="center">
+              {points_total % 1 === 0 ? points_total : points_total.toFixed(3)}
+            </td>
           </tr>
         );
         tablerows.push(constraint_row);
@@ -192,28 +212,34 @@ const ModifyStudentGrades = () => {
         : "";
 
       let table = (
-        <div key={question_key}>
+        <div class="questionResponse" key={question_key}>
           <br />
-          <h4>Student Response:</h4>
-          <p>Question:{question_text}</p>
-          <pre>{student_responses[question_key]}</pre>
-          <table>
+          <h3>Student Response:</h3>
+          <p className="questionResponse">
+            <strong>Question:</strong> {question_text}
+          </p>
+          <h4>Student Code:</h4>
+          <pre className="outlineQuestion">
+            {student_responses[question_key]}
+          </pre>
+          <table className="questionTable">
             <thead>
               <tr>
-                <th>EXPECTED</th>
-                <th>RUN</th>
-                <th>MODIFY</th>
-                <th>AUTOGRADED</th>
-                <th>MAX</th>
+                <th className="questionTablecolumn ">EXPECTED</th>
+                <th className="questionTablecolumn">RUN</th>
+                <th className="questionTablecolumn">MODIFY</th>
+                <th className="questionTablecolumn">AUTOGRADED</th>
+                <th className="questionTablecolumn">MAX</th>
               </tr>
             </thead>
             <tbody>{tablerows}</tbody>
           </table>
-          <h4>Add Comment</h4>
+          <h4>Add or Modify Comment:</h4>
           <textarea
             name={index}
-            cols="30"
-            rows="10"
+            cols="20"
+            rows="5"
+            className="modifyComment"
             value={comment[index]}
             onChange={handleComment}
           ></textarea>
@@ -235,22 +261,32 @@ const ModifyStudentGrades = () => {
 
         const testcase_row = (
           <tr key={[question_key, i]}>
-            <td>
+            <td className="questionTablecolumn center">
               {expected_function_name}({input})→
               {expected_output}
             </td>
-            <td>{student_output}</td>
-            <td>
+            <td className="center">{student_output}</td>
+            <td className="center">
               <input
-                className="gradeTestsButton"
                 name={[question_key, i]}
+                className="padding modifyScore"
                 type="number"
-                value={points_earned}
+                value={
+                  points_earned % 1 === 0
+                    ? points_earned
+                    : points_earned.toFixed(3)
+                }
                 onChange={handleChange}
               />
             </td>
-            <td>{points_earned}</td>
-            <td>{points_total}</td>
+            <td className="center ">
+              {points_earned % 1 === 0
+                ? points_earned
+                : points_earned.toFixed(3)}
+            </td>
+            <td className="center">
+              {points_total % 1 === 0 ? points_total : points_total.toFixed(3)}
+            </td>
           </tr>
         );
         tablerows.push(testcase_row);
@@ -259,13 +295,13 @@ const ModifyStudentGrades = () => {
   }
 
   return (
-    <div className="padded">
+    <div className="column">
       {tables}
       <h2>
-        {points_counter}/{total_points}
+        Total Score: {points_counter.toFixed(3)}/{total_points.toFixed(2)}
       </h2>
       <input
-        className="gradeTestsButton"
+        className="gradeTestsButton margin"
         type="button"
         value="Update"
         onClick={updateGrades}

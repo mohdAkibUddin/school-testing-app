@@ -68,64 +68,81 @@ class GradesPage extends React.Component {
         let tablerows = [];
         const function_name_row = (
           <tr key={[question_key, expected_function_name]}>
-            <td>
+            <td className="questionTablecolumn center">
               <strong>name:</strong> {expected_function_name}
             </td>
-            <td>{student_function_name}</td>
-            <td>{points_earned}</td>
-            <td>{points_total}</td>
+            <td className="center">{student_function_name}</td>
+            <td className="center">
+              {points_earned % 1 === 0
+                ? points_earned
+                : points_earned.toFixed(3)}
+            </td>
+            <td className="center">
+              {points_total % 1 === 0 ? points_total : points_total.toFixed(3)}
+            </td>
           </tr>
         );
         tablerows.push(function_name_row);
 
-            if (question_data.constraints_score.constraint) {
-               const constraint = question_data.constraints_score.constraint;
-               const points_earned = question_data.constraints_score.points_earned;
-               const points_total = question_data.constraints_score.points;
-               total_points += parseFloat(points_total);
-               points_counter += parseFloat(points_earned);
-               const constraint_row = (
-                  <tr key={[question_key, constraint]}>
-                     <td><strong>constraint:</strong> {constraint}</td>
-                     <td>{points_earned != 0 ? 'PASS' : 'FAIL'}</td>
-                     <td>
-                        {points_earned}
-                     </td>
-                     <td>
-                        {points_total}
-                     </td>
-                  </tr>
-               );
-               tablerows.push(constraint_row)
-            }
+        if (question_data.constraints_score.constraint) {
+          const constraint = question_data.constraints_score.constraint;
+          const points_earned = question_data.constraints_score.points_earned;
+          const points_total = question_data.constraints_score.points;
+          total_points += parseFloat(points_total);
+          points_counter += parseFloat(points_earned);
+          const constraint_row = (
+            <tr key={[question_key, constraint]}>
+              <td className="questionTablecolumn center">
+                <strong>constraint:</strong> {constraint}
+              </td>
+              <td className="center">{points_earned != 0 ? "PASS" : "FAIL"}</td>
+              <td className="center">
+                {points_earned % 1 === 0
+                  ? points_earned
+                  : points_earned.toFixed(3)}
+              </td>
+              <td className="center">
+                {points_total % 1 === 0
+                  ? points_total
+                  : points_total.toFixed(3)}
+              </td>
+            </tr>
+          );
+          tablerows.push(constraint_row);
+        }
 
         const question_text = this.state.questions.has(question_key)
           ? this.state.questions.get(question_key).question
           : "";
         let table = (
-          <div key={question_key}>
+          <div class="questionResponse" key={question_key}>
             <br />
-            <h4>Student Response:</h4>
-            <p>Question: {question_text}</p>
-            <pre>{this.state.student_responses[question_key]}</pre>
-            <table>
+            <h3>Student Response:</h3>
+            <p className="questionResponse">Question: {question_text}</p>
+            <h4>Student Code:</h4>
+            <pre className="outlineQuestion">
+              {this.state.student_responses[question_key]}
+            </pre>
+            <table className="questionTable">
               <thead>
                 <tr>
-                  <th>EXPECTED</th>
-                  <th>STUDENT RUN OUTPUT</th>
-                  <th>EARNED</th>
-                  <th>MAX POINTS AVAILABLE</th>
+                  <th className="questionTablecolumn ">EXPECTED</th>
+                  <th className="questionTablecolumn ">STUDENT RUN OUTPUT</th>
+                  <th className="questionTablecolumn ">EARNED</th>
+                  <th className="questionTablecolumn ">MAX POINTS AVAILABLE</th>
                 </tr>
               </thead>
               <tbody>{tablerows}</tbody>
             </table>
-            <textarea
-              readOnly
-              value={this.state.comment[index]}
-              id=""
-              cols="30"
-              rows="10"
-            ></textarea>
+            <div className="comment">
+              <h4>Comment: </h4>
+              {console.log(this.state.comment[index])}
+              <p>
+                {this.state.comment[index] === null
+                  ? " No Comment Made by Teacher"
+                  : this.state.comment[index]}
+              </p>
+            </div>
             <br />
           </div>
         );
@@ -144,13 +161,21 @@ class GradesPage extends React.Component {
 
           const testcase_row = (
             <tr key={[question_key, i]}>
-              <td>
+              <td className="questionTablecolumn center">
                 {expected_function_name}({input})→
                 {expected_output}
               </td>
-              <td>{student_output}</td>
-              <td>{points_earned}</td>
-              <td>{points_total}</td>
+              <td className="center">{student_output}</td>
+              <td className="center">
+                {points_earned % 1 === 0
+                  ? points_earned
+                  : points_earned.toFixed(3)}
+              </td>
+              <td className="center">
+                {points_total % 1 === 0
+                  ? points_total
+                  : points_total.toFixed(3)}
+              </td>
             </tr>
           );
           tablerows.push(testcase_row);
@@ -159,10 +184,11 @@ class GradesPage extends React.Component {
     }
 
     return (
-      <div className="padded">
+      <div className="column">
         {tables}
         <h2>
-          Total Points Earned: {points_counter}/{total_points}
+          Total Points Earned: {points_counter.toFixed(3)}/
+          {total_points.toFixed(2)}
         </h2>
       </div>
     );

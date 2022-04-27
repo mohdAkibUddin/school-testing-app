@@ -67,7 +67,8 @@ class GradeTests extends React.Component {
       let element;
       if (!auto_graded) {
         element = (
-          <div key={test_key}>
+          <div className="tests" key={test_key}>
+            <h3> Test Name: </h3>
             <input
               className="gradeTestsButton"
               type="submit"
@@ -82,7 +83,8 @@ class GradeTests extends React.Component {
         );
       } else {
         element = (
-          <div key={test_key}>
+          <div className="tests" key={test_key}>
+            <h3> Test Name: </h3>
             <Link
               to={{
                 pathname: "/modify-grades",
@@ -90,10 +92,12 @@ class GradeTests extends React.Component {
               }}
             >
               <input
+                className="questionButton"
                 type="submit"
                 value={this.state.test_names.get(test_key)}
               />
             </Link>
+
             <br />
             <br />
           </div>
@@ -106,11 +110,13 @@ class GradeTests extends React.Component {
     return (
       <div className="horizontal-aligned-container">
         <div className="outline">
-          <h3>Click On An Exam to Initiate Grading</h3>
+          <h3 className="testTitle">Click On An Exam to Initiate Grading</h3>
           {ungraded_tests}
         </div>
         <div className="outline">
-          <h3>Click On An Exam to Modify Autograded Results</h3>
+          <h3 className="testTitle">
+            Click On An Exam to Modify Autograded Results
+          </h3>
           {graded_tests}
         </div>
       </div>

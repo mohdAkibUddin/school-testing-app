@@ -220,7 +220,7 @@ a:hover {
 }
 
 .questionButton:hover {
-  background-color: #0a0a23;
+  background-color: #7a7a89;
 }
 
 .questionButton:active {
@@ -232,14 +232,83 @@ a:hover {
 .gradeTestsButton {
   font-size: 1.2em;
   top: 50%;
-  background-color: #0a0a23;
+  background-color: #0a0a26;
   color: #fff;
   border: none;
   border-radius: 10px;
   box-shadow: 0px 0px 2px 2px rgb(0, 0, 0);
 }
+
+.gradeTestsButton:hover {
+  background-color: #7a7a89;
+}
 .tests {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  padding: 1%;
+}
+.release-tests {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1%;
+}
+
+.padding {
+  padding: 2%;
+}
+.margin {
+  margin: 2%;
+}
+.questionTable {
+  width: 100%;
+}
+.questionTablecolumn {
+  height: 50px;
+}
+.column {
+  padding-top: 50px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.students {
+  width: 30vw;
+}
+.center {
+  text-align: center;
+}
+
+.questionResponseTable {
+  max-width: 50vw;
+}
+.questionResponse {
+  font-size: 20px;
+  max-width: 50vw;
+}
+.questionResponse {
+  width: 100%;
+}
+
+.outlineQuestion {
+  border: 3px solid black;
+  padding: 1%;
+}
+
+.comment {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+.modifyScore {
+  font-size: 14pt;
+}
+
+.modifyComment {
+  font-size: 17pt;
 }
