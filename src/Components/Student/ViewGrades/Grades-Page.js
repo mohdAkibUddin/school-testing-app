@@ -139,7 +139,7 @@ class GradesPage extends React.Component {
               {console.log(this.state.comment[index])}
               <p>
                 {this.state.comment[index] === null
-                  ? " No Comment Made by Teacher"
+                  ? " No Comment Made by The Teacher"
                   : this.state.comment[index]}
               </p>
             </div>

@@ -4,6 +4,7 @@ body {
 .question-card {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 .question-card > div {
@@ -186,6 +187,9 @@ nav.contact .Contact {
   border-radius: 10px;
   box-shadow: 0px 0px 2px 2px rgb(0, 0, 0);
 }
+.buttonLogin:hover {
+  background-color: #7a7a89;
+}
 .loginImage {
   width: 100px;
   margin-left: auto;
@@ -237,6 +241,32 @@ a:hover {
   border: none;
   border-radius: 10px;
   box-shadow: 0px 0px 2px 2px rgb(0, 0, 0);
+}
+.nonAnswered:hover {
+  background-color: #7a7a89;
+}
+.nonAnswered {
+  font-size: 1.2em;
+  top: 50%;
+  background-color: #0a0a26;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0px 0px 2px 2px rgb(0, 0, 0);
+  margin: 0.5%;
+}
+.answered:hover {
+  background-color: #ffffff;
+}
+.answered {
+  font-size: 1.2em;
+  top: 50%;
+  background-color: #00ff40;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0px 0px 2px 2px rgb(0, 0, 0);
+  margin: 0.5%;
 }
 
 .gradeTestsButton:hover {
@@ -311,4 +341,17 @@ a:hover {
 
 .modifyComment {
   font-size: 17pt;
+}
+
+#errorMessage {
+  text-align: center;
+}
+.questionName,
+.questionDetails,
+.searchQuestion {
+  font-size: 18px;
+}
+
+textarea {
+  font-size: 18px;
 }

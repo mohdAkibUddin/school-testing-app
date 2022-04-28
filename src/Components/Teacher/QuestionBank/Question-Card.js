@@ -36,7 +36,11 @@ class QuestionCard extends React.Component {
             <></>
           )}
 
-          <div>Name: {this.props.function_name}</div>
+          <div>
+            <p className="questionName">
+              <strong>Name:</strong> {this.props.function_name}
+            </p>
+          </div>
           <div>
             <input
               className="questionButton"
@@ -47,7 +51,11 @@ class QuestionCard extends React.Component {
           </div>
         </div>
 
-        <p style={p_tag}> Description: {this.props.question}</p>
+        <p className="questionDetails" style={p_tag}>
+          {" "}
+          <strong>Description: </strong>
+          {this.props.question}
+        </p>
       </>
     );
   }

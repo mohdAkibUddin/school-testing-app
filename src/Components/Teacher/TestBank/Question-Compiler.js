@@ -170,12 +170,15 @@ class QuestionCompiler extends React.Component {
 
     return (
       <div id="test-questions" className="outline">
-        <h3>Test Name:</h3>
-        <input
-          type="text"
-          value={this.state.test_name}
-          onChange={this.handleTestName}
-        />
+        <div className="comment">
+          <h3>Test Name:&#160;&#160; </h3>
+
+          <input
+            type="text"
+            value={this.state.test_name}
+            onChange={this.handleTestName}
+          />
+        </div>
         <div style={{ height: "80vh" }} className="scrollable-container">
           {questionsToRender}
         </div>
@@ -186,7 +189,11 @@ class QuestionCompiler extends React.Component {
           <h3>Non-Zero Values Expected !!!</h3>
         </div>
         <div className="wrapper">
-          <input type="submit" onClick={this.handleSubmit} />
+          <input
+            className="questionButton"
+            type="submit"
+            onClick={this.handleSubmit}
+          />
         </div>
       </div>
     );

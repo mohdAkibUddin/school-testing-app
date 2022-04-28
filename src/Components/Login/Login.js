@@ -43,7 +43,10 @@ const Login = ({ history }) => {
   return (
     <div className="app">
       <div className="login-form">
-        <img className="loginImage" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1200px-Python-logo-notext.svg.png"/>
+        <img
+          className="loginImage"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1200px-Python-logo-notext.svg.png"
+        />
         <div className="title">Sign In</div>
         {renderForm}
         {isAuthenticated ? (
@@ -54,7 +57,12 @@ const Login = ({ history }) => {
           )
         ) : (
           <div>
-            {errorMessages.message ? <h1>{errorMessages.message}</h1> : <></>}
+            {console.log(errorMessages)}
+            {errorMessages.message ? (
+              <h1 id="errorMessage">{errorMessages.message}</h1>
+            ) : (
+              <></>
+            )}
           </div>
         )}
       </div>

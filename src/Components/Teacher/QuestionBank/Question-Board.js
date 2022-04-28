@@ -235,6 +235,7 @@ class QuestionBoard extends React.Component {
         <h1>Question Bank</h1>
         <input
           type="text"
+          className="searchQuestion"
           name="searchString"
           placeholder="search question"
           value={this.state.searchString}

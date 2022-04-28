@@ -123,7 +123,7 @@ class TestPage extends React.Component {
             value={btn_value}
             key={i}
             onClick={this.handleLegendClick}
-            className={completed ? "answered" : null}
+            className={completed ? "answered" : "nonAnswered"}
           />
           <br />
         </div>
@@ -149,11 +149,14 @@ class TestPage extends React.Component {
             <h2>{++counter}. </h2>
             <h2>{question.function_name}</h2>
           </div>
-          <p>{question.question}</p>
-          <h4>Expected Values</h4>
+          <p className="questionDetails">
+            <strong>Description: </strong>
+            {question.question}
+          </p>
+          <h3>Expected Values</h3>
           {testcases}
-          <h4>Expected Types</h4>
-          <p>
+          <h3>Expected Types</h3>
+          <p className="questionDetails">
             {question.function_name}({question.types_input.join(", ")})→
             {question.types_output.join(", ")};
           </p>
@@ -164,7 +167,7 @@ class TestPage extends React.Component {
           </h3>
           <textarea
             name={key}
-            cols="90"
+            cols="70"
             rows="15"
             value={this.state.student_response[key]}
             onChange={this.handleChange}
@@ -176,17 +179,19 @@ class TestPage extends React.Component {
     return (
       <>
         <div className="padded">
-          <div className="question-compiler-element">{legend}</div>
+          <div className="question-compiler-element tests">{legend}</div>
         </div>
-        <div className="padded">
+        <div className="padding">
           {renderable_questions[this.state.display_index]}
           <input
+            className="gradeTestsButton margin"
             type="button"
             value="Previous"
             hidden={this.state.display_index == 0}
             onClick={this.handleMove}
           />
           <input
+            className="gradeTestsButton margin"
             type="button"
             value="Next"
             hidden={this.state.display_index == renderable_questions.length - 1}
@@ -195,6 +200,7 @@ class TestPage extends React.Component {
           <div className="wrapper">
             <Link to="/view-tests">
               <input
+                className="gradeTestsButton"
                 type="submit"
                 onClick={this.handleSubmit}
                 hidden={this.state.questions.length === 0}
