@@ -167,7 +167,6 @@ class TestPage extends React.Component {
           </h3>
           <textarea
             name={key}
-            cols="70"
             rows="15"
             value={this.state.student_response[key]}
             onChange={this.handleChange}
